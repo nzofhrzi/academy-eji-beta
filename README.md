@@ -1,2 +1,2 @@
-# academy-eji-beta
-Beta Version
+# academy-eji
+AcademyEji Learning Apps

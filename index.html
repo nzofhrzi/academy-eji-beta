@@ -1,205 +1,361 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Academy Eji - Platform Pembelajaran">
-  <title>Dashboard – Academy Eji</title>
-  
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-  <!-- Sidebar Navigation -->
-  <aside id="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">
-        <i class="bx bxs-graduation"></i>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <title>Academy Eji - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/pages/dashboard.css" />
+  </head>
+  <body>
+    <!-- ── SIDEBAR ── -->
+    <nav id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon"><i class="bx bxs-graduation"></i></div>
+        <div class="logo-text">Academy<span>Eji.</span></div>
       </div>
-      <div class="logo-text">Academy <span>Eji</span></div>
-    </div>
 
-    <nav class="sidebar-scroll">
-      <!-- Main Navigation -->
-      <div class="sidebar-section">Dashboard</div>
-      <a href="index.html" class="nav-item active">
-        <i class="nav-icon bx bxs-dashboard"></i>
-        <span>Overview</span>
-      </a>
+      <!-- FIX: sidebar-scroll SEKARANG DI ATAS sidebar-footer -->
+      <div class="sidebar-scroll">
+        <div class="sidebar-section">Menu Utama</div>
+        <a class="nav-item active" href="index.html">
+          <i class="bx bx-home-alt nav-icon"></i> Dashboard
+        </a>
+        <a class="nav-item" href="article-landing.html">
+          <i class="bx bx-news nav-icon"></i> Artikel &amp; Wawasan
+        </a>
+        <a class="nav-item" href="prompt/index.html"
+          ><i class="bx bx-bot nav-icon"></i> Tools & Prompt AI</a
+        >
+        <a class="nav-item" href="referensi/index.html"
+          ><i class="bx bx-book-open nav-icon"></i> Referensi &amp; Ebook</a
+        >
+        <a class="nav-item" href="ujicoba/index.html">
+          <i class="bx bx-trophy nav-icon"></i> Kelas Uji Coba
+        </a>
+        <a class="nav-item" href="config.html">
+          <i class="bx bx-info-circle nav-icon"></i> Tentang Kami
+        </a>
+        <a
+          class="nav-item"
+          id="nav-upgrade-vip"
+          href="premium/index.html"
+          style="color: #d97706; display: none"
+        >
+          <i class="bx bxs-crown nav-icon" style="color: #f59e0b"></i> Upgrade
+          VIP
+        </a>
 
-      <div class="sidebar-section">Learning</div>
-      <a href="#courses" class="nav-item">
-        <i class="nav-icon bx bxs-book"></i>
-        <span>Courses</span>
-      </a>
-      <a href="#ujicoba" class="nav-item">
-        <i class="nav-icon bx bxs-test-tube"></i>
-        <span>Test</span>
-      </a>
-      <a href="#progress" class="nav-item">
-        <i class="nav-icon bx bxs-chart"></i>
-        <span>Progress</span>
-      </a>
+        <div class="sidebar-section" style="margin-top: 15px">Manajemen</div>
+        <a class="nav-item" href="admin.html">
+          <i class="bx bx-user-pin nav-icon"></i> Admin Panel
+        </a>
+      </div>
 
-      <div class="sidebar-section">Resources</div>
-      <a href="#referensi" class="nav-item">
-        <i class="nav-icon bx bxs-file"></i>
-        <span>References</span>
-      </a>
-      <a href="#premium" class="nav-item">
-        <i class="nav-icon bx bxs-star"></i>
-        <span>Premium</span>
-      </a>
-
-      <div class="sidebar-section">Settings</div>
-      <a href="#admin" class="nav-item">
-        <i class="nav-icon bx bxs-cog"></i>
-        <span>Administration</span>
-      </a>
-      <a href="#analytics" class="nav-item">
-        <i class="nav-icon bx bxs-bar-chart-alt-2"></i>
-        <span>Analytics</span>
-      </a>
+      <!-- FIX: sidebar-footer SEKARANG DI BAWAH sidebar-scroll -->
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar"><i class="bx bxs-user"></i></div>
+          <div class="user-info">
+            <span class="user-name" id="sidebar-username">Memuat...</span>
+            <span class="user-role" id="sidebar-role">—</span>
+          </div>
+          <button
+            id="logout-btn"
+            title="Keluar"
+            style="
+              display: none;
+              background: none;
+              border: none;
+              cursor: pointer;
+              color: var(--ink3);
+              font-size: 18px;
+              padding: 4px;
+              margin-left: auto;
+            "
+            onclick="Auth.logout()"
+          >
+            <i class="bx bx-log-out"></i>
+          </button>
+        </div>
+      </div>
     </nav>
 
-    <!-- User Profile -->
-    <div class="sidebar-footer">
-      <div class="user-profile">
-        <div class="user-avatar">
-          <i class="bx bxs-user"></i>
+    <!-- Overlay untuk mobile -->
+    <div id="sidebar-overlay"></div>
+
+    <!-- ── WRAPPER ── -->
+    <div id="wrapper">
+      <!-- Topbar -->
+      <div id="topbar">
+        <div class="topbar-left">
+          <button id="sidebar-toggle" aria-label="Toggle sidebar">
+            <i class="bx bx-menu"></i>
+          </button>
+          <div>
+            <div class="page-title">Dashboard Academy Eji</div>
+            <div class="breadcrumb">Beranda</div>
+          </div>
         </div>
-        <div class="user-info">
-          <div class="user-name">User Name</div>
-          <div class="user-role">Student</div>
+        <div class="topbar-right">
+          <div class="search-box">
+            <i class="bx bx-search"></i>
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Cari artikel..."
+            />
+          </div>
+          <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode">
+            <i class="bx bx-moon"></i>
+          </button>
+          <button class="icon-btn" id="topbar-notif-btn" title="Notifikasi" aria-label="Notifikasi">
+            <i class="bx bx-bell"></i>
+          </button>
         </div>
       </div>
+
+      <!-- Main Content -->
+      <div id="main">
+        <!-- Greeting Header (gaya beranda mobile) -->
+        <div class="greet-header">
+          <div class="greet-left">
+            <div class="greet-avatar"><i class="bx bxs-user-circle"></i></div>
+            <div class="greet-text">
+              <div class="greet-hello">
+                Halo <span class="greet-wave">👋</span>
+              </div>
+              <div class="greet-name" id="greet-username">Memuat...</div>
+            </div>
+          </div>
+          <button class="notif-btn" id="notif-btn" aria-label="Notifikasi">
+            <i class="bx bx-bell"></i>
+            <span class="notif-badge" id="notif-badge">2</span>
+          </button>
+        </div>
+
+        <!-- Quick Search + Filter -->
+        <div class="quick-search-row">
+          <div class="quick-search-box">
+            <i class="bx bx-search"></i>
+            <input
+              type="text"
+              id="quick-search-input"
+              placeholder="Cari Artikel, Ujian, Prompt..."
+            />
+          </div>
+          <button class="filter-btn" id="filter-btn" aria-label="Filter">
+            <i class="bx bx-slider-alt"></i>
+          </button>
+        </div>
+
+        <!-- Category Icons -->
+        <div class="cat-scroll">
+          <div class="cat-row">
+            <a href="article-landing.html" class="cat-item" data-cat="artikel">
+              <div class="cat-icon"><i class="bx bx-news"></i></div>
+              <span>Artikel</span>
+            </a>
+            <a href="prompt/index.html" class="cat-item active" data-cat="prompt">
+              <div class="cat-icon"><i class="bx bx-bot"></i></div>
+              <span>Prompt AI</span>
+            </a>
+            <a href="referensi/index.html" class="cat-item" data-cat="referensi">
+              <div class="cat-icon"><i class="bx bx-book-open"></i></div>
+              <span>Referensi</span>
+            </a>
+            <a href="ujicoba/index.html" class="cat-item" data-cat="tryout">
+              <div class="cat-icon"><i class="bx bx-trophy"></i></div>
+              <span>Tryout</span>
+            </a>
+            <a href="premium/index.html" class="cat-item" data-cat="premium">
+              <div class="cat-icon"><i class="bx bxs-crown"></i></div>
+              <span>Premium</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+          <div class="hero-greeting">
+            <i class="bx bxs-zap" style="color: #fbbf24"></i>
+            <span id="greeting-text">Selamat Belajar,</span>
+            <strong style="color: #fff">Semua 👋</strong>
+          </div>
+          <div class="hero-title">Kembangkan Potensimu Disini!</div>
+          <div class="hero-sub">
+            Kami menyediakan beragam fitur untuk dipelajari serta menyediakan
+            simulasi tes ujian tingkat mahasiswa dan lain-lain.
+          </div>
+          <div class="hero-actions">
+            <a href="ujicoba/index.html" class="hero-btn hero-btn-white">
+              <i class="bx bx-play-circle"></i> Lanjut Belajar
+            </a>
+            <a href="ujicoba/index.html" class="hero-btn hero-btn-ghost">
+              <i class="bx bx-list-check"></i> Ikut Tryout Baru
+            </a>
+          </div>
+        </div>
+
+        <!-- Toggle + Sort -->
+        <div class="filter-toggle-row">
+          <div class="toggle-pill" id="toggle-pill">
+            <button class="toggle-opt active" data-filter="semua">Semua</button>
+            <button class="toggle-opt" data-filter="favorit">Favorit Saya</button>
+          </div>
+          <button class="sort-btn" id="sort-btn">
+            <i class="bx bx-sort-alt-2"></i> Urutkan
+          </button>
+        </div>
+
+        <!-- Featured / Konten Unggulan (dinamis: berdasarkan konten paling banyak diklik) -->
+        <div class="card-wrap" style="margin-bottom: 28px">
+          <div class="section-head">
+            <h2>
+              <i class="bx bx-flame" style="color: var(--warn)"></i>
+              Konten Unggulan
+            </h2>
+            <a href="prompt/index.html" class="see-all-link">
+              Lihat Semua <i class="bx bx-chevron-right"></i>
+            </a>
+          </div>
+          <div class="feat-scroll" id="feat-scroll">
+            <div class="feat-skeleton"></div>
+            <div class="feat-skeleton"></div>
+            <div class="feat-skeleton"></div>
+            <div class="feat-skeleton"></div>
+          </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div
+              class="stat-icon"
+              style="background: rgba(37, 99, 235, 0.1); color: var(--primary)"
+            >
+              <i class="bx bx-layer"></i>
+            </div>
+            <div>
+              <div class="stat-val" id="stat-total-konten">–</div>
+              <div class="stat-label">Konten Tersedia</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div
+              class="stat-icon"
+              style="background: rgba(16, 185, 129, 0.1); color: var(--success)"
+            >
+              <i class="bx bx-check-circle"></i>
+            </div>
+            <div>
+              <div class="stat-val">1</div>
+              <div class="stat-label">Ujian Selesai</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div
+              class="stat-icon"
+              style="background: rgba(245, 158, 11, 0.1); color: var(--warn)"
+            >
+              <i class="bx bx-trophy"></i>
+            </div>
+            <div>
+              <div class="stat-val">100</div>
+              <div class="stat-label">Skor Terbaik</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div
+              class="stat-icon"
+              style="background: rgba(249, 115, 22, 0.1); color: var(--accent)"
+            >
+              <i class="bx bx-news"></i>
+            </div>
+            <div>
+              <div class="stat-val" id="stat-total-artikel">–</div>
+              <div class="stat-label">Artikel Tersedia</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jelajahi Berdasarkan Kategori -->
+        <div class="card-wrap" style="margin-bottom: 28px">
+          <div class="section-head">
+            <h2>
+              <i class="bx bx-category-alt" style="color: var(--primary)"></i>
+              Jelajahi Berdasarkan Kategori
+            </h2>
+          </div>
+          <div class="kategori-grid" id="kategori-grid">
+            <div class="kat-skeleton"></div>
+            <div class="kat-skeleton"></div>
+            <div class="kat-skeleton"></div>
+            <div class="kat-skeleton"></div>
+            <div class="kat-skeleton"></div>
+            <div class="kat-skeleton"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /#main -->
+
+      <!-- Footer -->
+      <footer>
+        <div class="footer-inner">
+          <div class="footer-top">
+            <div class="footer-brand">
+              <a href="index.html" class="footer-brand-logo">
+                <div class="f-logo-icon"><i class="bx bxs-graduation"></i></div>
+                <div class="f-logo-text">Academy<span>Eji.</span></div>
+              </a>
+              <p>
+                Platform belajar dan simulasi ujian sertifikasi bahasa
+                terpercaya untuk siswa dan mahasiswa di seluruh Indonesia.
+              </p>
+              <div class="footer-socials">
+                <a href="#" class="fsoc" aria-label="Instagram"
+                  ><i class="bx bxl-instagram"></i
+                ></a>
+                <a href="#" class="fsoc" aria-label="YouTube"
+                  ><i class="bx bxl-youtube"></i
+                ></a>
+                <a href="#" class="fsoc" aria-label="Twitter"
+                  ><i class="bx bxl-twitter"></i
+                ></a>
+                <a href="#" class="fsoc" aria-label="WhatsApp"
+                  ><i class="bx bxl-whatsapp"></i
+                ></a>
+                <a href="#" class="fsoc" aria-label="Telegram"
+                  ><i class="bx bxl-telegram"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">
+            <p>© 2025 Academy Eji. Dibuat dengan ❤️ untuk pelajar Indonesia.</p>
+          </div>
+        </div>
+      </footer>
     </div>
-  </aside>
+    <!-- /#wrapper -->
 
-  <!-- Main Wrapper -->
-  <div id="wrapper">
-    <!-- Topbar -->
-    <header id="topbar">
-      <div class="topbar-left">
-        <button class="icon-btn" data-toggle="sidebar">
-          <i class="bx bx-menu"></i>
-        </button>
-        <div class="page-title">Dashboard</div>
-      </div>
-
-      <div class="topbar-right">
-        <button class="icon-btn">
-          <i class="bx bx-search"></i>
-        </button>
-        <button class="icon-btn">
-          <i class="bx bx-bell"></i>
-        </button>
-        <button class="icon-btn" id="theme-toggle" onclick="window.themeManager?.toggleTheme()">
-          <i class="bx bx-sun"></i>
-        </button>
-        <button class="icon-btn">
-          <i class="bx bx-log-out"></i>
-        </button>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main id="main">
-      <div class="page-header">
-        <div class="page-header-info">
-          <h1>Welcome Back! 👋</h1>
-          <p>Track your learning progress and continue your courses</p>
-        </div>
-        <button class="btn btn-primary">
-          <i class="bx bx-plus"></i> Start Learning
-        </button>
-      </div>
-
-      <!-- Dashboard Cards Grid -->
-      <div class="grid grid-2">
-        <!-- Card: Active Courses -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3>Active Courses</h3>
-              <p style="margin: 0; font-size: 12px; color: var(--text-tertiary);">In Progress</p>
-            </div>
-            <div style="font-size: 32px;">📚</div>
-          </div>
-          <div class="card-body">
-            <div style="font-size: 28px; font-weight: 700; color: var(--primary);">5</div>
-            <p style="margin-bottom: 0; color: var(--text-tertiary); font-size: 13px;">Courses you're currently taking</p>
-          </div>
-        </div>
-
-        <!-- Card: Completion Rate -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3>Completion Rate</h3>
-              <p style="margin: 0; font-size: 12px; color: var(--text-tertiary);">Overall Progress</p>
-            </div>
-            <div style="font-size: 32px;">📊</div>
-          </div>
-          <div class="card-body">
-            <div style="font-size: 28px; font-weight: 700; color: var(--success);">68%</div>
-            <p style="margin-bottom: 0; color: var(--text-tertiary); font-size: 13px;">Course completion average</p>
-          </div>
-        </div>
-
-        <!-- Card: Total Points -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3>Total Points</h3>
-              <p style="margin: 0; font-size: 12px; color: var(--text-tertiary);">Earned</p>
-            </div>
-            <div style="font-size: 32px;">⭐</div>
-          </div>
-          <div class="card-body">
-            <div style="font-size: 28px; font-weight: 700; color: var(--warning);">2,450</div>
-            <p style="margin-bottom: 0; color: var(--text-tertiary); font-size: 13px;">Points earned from tests</p>
-          </div>
-        </div>
-
-        <!-- Card: Achievements -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3>Achievements</h3>
-              <p style="margin: 0; font-size: 12px; color: var(--text-tertiary);">Unlocked</p>
-            </div>
-            <div style="font-size: 32px;">🏆</div>
-          </div>
-          <div class="card-body">
-            <div style="font-size: 28px; font-weight: 700; color: var(--danger);">12</div>
-            <p style="margin-bottom: 0; color: var(--text-tertiary); font-size: 13px;">Badges unlocked</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Activity Section -->
-      <div class="card" style="margin-top: 32px;">
-        <div class="card-header">
-          <h3>Recent Activity</h3>
-        </div>
-        <div class="card-body">
-          <div class="empty-state">
-            <div class="empty-state-icon">📋</div>
-            <h3>No Recent Activity</h3>
-            <p>Start learning by selecting a course from the sidebar</p>
-            <button class="btn btn-primary btn-sm">Browse Courses</button>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Scripts -->
-  <script src="js/utils.js"></script>
-  <script src="js/theme.js"></script>
-  <script src="js/sidebar.js"></script>
-  <script src="js/modal.js"></script>
-  <script src="js/app.js"></script>
-</body>
+    <script src="js/pages/dashboard.js"></script>
+    <!-- ── AUTH SCRIPTS ── -->
+    <script src="auth.js"></script>
+    <script src="auth-gate.js"></script>
+  </body>
 </html>

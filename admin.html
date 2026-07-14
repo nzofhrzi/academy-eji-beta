@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Admin Panel – Academy Eji</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/pages/admin.css" />
+</head>
+<body>
+
+<!-- AUTH GATE OVERLAY -->
+<div id="auth-gate-overlay" class="visible">
+  <div class="auth-card">
+    <div class="auth-icon"><i class='bx bx-lock-alt'></i></div>
+    <div class="auth-title">Admin Panel</div>
+    <p class="auth-sub">Masukkan Admin Key untuk mengakses panel. Key dikonfigurasi via environment variable <code>ADMIN_KEY</code> di Vercel.</p>
+    <div class="auth-error" id="auth-gate-error"><i class='bx bx-error-circle'></i> Admin key salah atau tidak valid.</div>
+    <input type="password" id="auth-gate-input" class="auth-input" placeholder="Masukkan Admin Key..." autocomplete="current-password" />
+    <button class="topbar-btn btn-primary" style="width:100%;justify-content:center;font-size:14px;padding:12px;" id="auth-gate-btn" onclick="submitAdminGate()">
+      <i class='bx bx-log-in'></i> Masuk
+    </button>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><i class='bx bxs-graduation'></i></div>
+    <div class="logo-text">Academy<span>Eji.</span></div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-profile">
+      <div class="user-avatar"><i class='bx bxs-user'></i></div>
+      <div class="user-info">
+        <span class="user-name">Admin Eji</span>
+        <span class="user-role">Super Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-scroll">
+    <div class="sidebar-section">Menu Utama</div>
+    <a class="nav-item" href="index.html"><i class='bx bx-home-alt nav-icon'></i> Dashboard</a>
+    <a class="nav-item" href="config.html"><i class='bx bx-info-circle nav-icon'></i> Tentang Kami</a>
+    <div class="sidebar-section" style="margin-top:10px;">Manajemen</div>
+    <a class="nav-item active" href="admin.html"><i class='bx bx-user-pin nav-icon'></i> Admin Panel</a>
+    <a class="nav-item" href="admin-user.html"><i class='bx bx-group nav-icon'></i> Kelola User</a>
+    <a class="nav-item" href="ujicoba/admin-soal.html"><i class='bx bx-edit nav-icon'></i> Kelola Soal</a>
+    <div class="sidebar-section" style="margin-top:10px;">Analitik</div>
+    <a class="nav-item" href="analytics.html"><i class='bx bx-bar-chart-alt-2 nav-icon'></i> Traffic Klik</a>
+  </div>
+</nav>
+<div id="sidebar-overlay"></div>
+
+<!-- WRAPPER -->
+<div id="wrapper">
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="topbar-left">
+      <button id="sidebar-toggle"><i class='bx bx-menu'></i></button>
+      <div class="page-title">Admin Panel</div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="theme-toggle" title="Toggle Dark Mode">
+        <i class='bx bx-moon'></i>
+      </button>
+      <button class="topbar-btn btn-primary" id="btn-save-gh">
+        <i class='bx bx-cloud-upload'></i><span class="btn-label"> Simpan ke GitHub</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card" style="animation-delay:0s">
+        <div class="stat-icon" style="background:rgba(37,99,235,0.1);color:var(--primary)">
+          <i class='bx bx-file'></i>
+        </div>
+        <div>
+          <div class="stat-val" id="s-total">–</div>
+          <div class="stat-label">Total Artikel</div>
+        </div>
+      </div>
+      <div class="stat-card" style="animation-delay:0.1s">
+        <div class="stat-icon" style="background:rgba(249,115,22,0.1);color:var(--accent)">
+          <i class='bx bx-star'></i>
+        </div>
+        <div>
+          <div class="stat-val" id="s-feat">–</div>
+          <div class="stat-label">Unggulan</div>
+        </div>
+      </div>
+      <div class="stat-card" style="animation-delay:0.2s">
+        <div class="stat-icon" style="background:rgba(16,185,129,0.1);color:var(--success)">
+          <i class='bx bx-purchase-tag-alt'></i>
+        </div>
+        <div>
+          <div class="stat-val" id="s-kat">–</div>
+          <div class="stat-label">Kategori</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="tab-artikel">
+        <i class='bx bx-list-ul'></i> Artikel
+      </button>
+      <button class="tab-btn" data-tab="tab-tambah">
+        <i class='bx bx-plus'></i> Tambah Artikel
+      </button>
+      <button class="tab-btn" data-tab="tab-kategori">
+        <i class='bx bx-purchase-tag-alt'></i> Kategori
+      </button>
+    </div>
+
+    <!-- PANEL: ARTIKEL LIST -->
+    <div class="panel active" id="tab-artikel">
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <span style="font-size:15px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px">
+            <i class='bx bx-list-ul' style="color:var(--primary);font-size:18px"></i>
+            Daftar Artikel
+          </span>
+          <div class="search-box" style="display:flex">
+            <i class='bx bx-search'></i>
+            <input type="text" id="art-search" placeholder="Cari artikel…">
+          </div>
+        </div>
+        <div class="bulk-action-bar" id="art-bulk-bar">
+          <span class="bulk-count"><i class='bx bx-check-square'></i> <span id="art-bulk-count">0</span> terpilih</span>
+          <div class="bulk-actions">
+            <button class="topbar-btn btn-ghost" id="art-bulk-clear" style="padding:7px 14px;font-size:12px">
+              <i class='bx bx-x'></i> Batal Pilih
+            </button>
+            <button class="topbar-btn btn-danger" id="art-bulk-delete" style="padding:7px 14px;font-size:12px">
+              <i class='bx bx-trash'></i> Hapus Massal
+            </button>
+          </div>
+        </div>
+        <div class="filter-bar">
+          <span class="filter-label"><i class='bx bx-filter-alt'></i> Filter</span>
+          <select class="form-control" id="art-filter-kat">
+            <option value="">Semua Kategori</option>
+          </select>
+          <button class="chip" id="art-filter-feat" type="button">
+            <i class='bx bx-star'></i> Unggulan saja
+          </button>
+        </div>
+        <div class="table-scroll">
+          <table id="art-table">
+            <thead>
+              <tr>
+                <th class="checkbox-th"><input type="checkbox" id="art-select-all" title="Pilih semua"></th>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>Tanggal</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="art-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: TAMBAH / EDIT ARTIKEL -->
+    <div class="panel" id="tab-tambah">
+      <div class="form-card">
+        <div class="form-card-header">
+          <h3 id="form-title"><i class='bx bx-edit'></i> Tambah Artikel Baru</h3>
+          <button class="topbar-btn btn-ghost" id="btn-reset-form" style="padding:6px 14px;font-size:12px">
+            <i class='bx bx-reset'></i> Reset
+          </button>
+        </div>
+        <div class="form-card-body">
+          <input type="hidden" id="edit-id">
+
+          <div class="section-divider"><h4>Informasi Dasar</h4></div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Judul <span class="req">*</span></label>
+              <input type="text" class="form-control" id="f-judul" placeholder="Judul artikel…">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kategori <span class="req">*</span></label>
+              <select class="form-control" id="f-kategori">
+                <option value="">-- Pilih Kategori --</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label class="form-label">Deskripsi / Ringkasan</label>
+              <textarea class="form-control" id="f-deskripsi" placeholder="Tulis ringkasan artikel…"></textarea>
+            </div>
+          </div>
+
+          <div class="section-divider"><h4>Media & Penerbitan</h4></div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Gambar Artikel</label>
+              <!-- Tab Picker -->
+              <div class="img-source-tabs">
+                <button class="img-src-tab active" id="tab-url-btn" onclick="switchImgTab('url')">
+                  <i class='bx bx-link'></i> Link URL
+                </button>
+                <button class="img-src-tab" id="tab-upload-btn" onclick="switchImgTab('upload')">
+                  <i class='bx bx-upload'></i> Upload File
+                </button>
+              </div>
+              <!-- Panel URL -->
+              <div class="img-source-panel active" id="img-panel-url">
+                <input type="url" class="form-control" id="f-gambar" placeholder="https://…" oninput="previewImage()" style="margin-bottom:4px">
+                <span class="form-hint">Tempel URL gambar dari Unsplash atau sumber lain</span>
+              </div>
+              <!-- Panel Upload -->
+              <div class="img-source-panel" id="img-panel-upload">
+                <div class="upload-zone" id="upload-zone">
+                  <input type="file" id="f-gambar-file" accept="image/*" onchange="handleFileSelect(event)">
+                  <div class="uz-icon"><i class='bx bx-folder-open'></i></div>
+                  <div class="uz-text">Klik atau drag &amp; drop gambar di sini</div>
+                  <div class="uz-hint">JPG, PNG, WebP, GIF · Maks 5 MB</div>
+                </div>
+                <div class="upload-progress" id="upload-progress">
+                  <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+                  <span class="progress-text" id="progress-text">Mengupload…</span>
+                </div>
+                <div id="upload-success" style="display:none;margin-top:6px;font-size:11px;color:var(--success);font-weight:600">
+                  <i class='bx bx-check-circle'></i> Gambar berhasil diupload ke GitHub
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Pratinjau Gambar</label>
+              <div class="img-preview-wrap" id="img-preview-wrap">
+                <div class="img-preview-ph" id="img-ph">
+                  <div class="icon"><i class='bx bx-image'></i></div>
+                  <div>Gambar akan tampil di sini</div>
+                </div>
+                <img id="img-preview" src="" alt="" style="display:none">
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tanggal Terbit</label>
+              <input type="date" class="form-control" id="f-tanggal">
+            </div>
+            <div class="form-group" style="justify-content:flex-end;padding-bottom:4px">
+              <label class="form-label">Artikel Unggulan</label>
+              <div class="toggle-wrap" style="margin-top:10px">
+                <label class="toggle">
+                  <input type="checkbox" id="f-featured">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label">Tandai sebagai unggulan ⭐</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="topbar-btn btn-primary" id="btn-submit-art">
+            <i class='bx bx-save'></i> Simpan Artikel
+          </button>
+          <button class="topbar-btn btn-ghost" id="btn-cancel-edit" style="display:none">
+            <i class='bx bx-x'></i> Batal Edit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL: KATEGORI -->
+    <div class="panel" id="tab-kategori">
+      <div class="form-card" style="max-width:540px;margin-bottom:24px">
+        <div class="form-card-header">
+          <h3><i class='bx bx-purchase-tag-alt'></i> Tambah Kategori</h3>
+        </div>
+        <div class="form-card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nama Kategori <span class="req">*</span></label>
+              <input type="text" class="form-control" id="kat-nama" placeholder="Misal: Teknologi">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Warna</label>
+              <div class="color-picker-wrap">
+                <input type="color" id="kat-warna" value="#3b82f6">
+                <span class="form-hint">Pilih warna badge kategori</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="topbar-btn btn-primary" id="btn-add-kat">
+            <i class='bx bx-plus'></i> Tambah Kategori
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <span style="font-size:15px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px">
+            <i class='bx bx-purchase-tag-alt' style="color:var(--primary);font-size:18px"></i>
+            Daftar Kategori
+          </span>
+        </div>
+        <div class="bulk-action-bar" id="kat-bulk-bar">
+          <span class="bulk-count"><i class='bx bx-check-square'></i> <span id="kat-bulk-count">0</span> terpilih</span>
+          <div class="bulk-actions">
+            <button class="topbar-btn btn-ghost" id="kat-bulk-clear" style="padding:7px 14px;font-size:12px">
+              <i class='bx bx-x'></i> Batal Pilih
+            </button>
+            <button class="topbar-btn btn-danger" id="kat-bulk-delete" style="padding:7px 14px;font-size:12px">
+              <i class='bx bx-trash'></i> Hapus Massal
+            </button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table id="kat-table">
+            <thead>
+              <tr>
+                <th class="checkbox-th"><input type="checkbox" id="kat-select-all" title="Pilih semua"></th>
+                <th>Nama</th>
+                <th>Warna</th>
+                <th>Jumlah Artikel</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="kat-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL KONFIRMASI HAPUS -->
+<div class="modal-overlay" id="del-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3><i class='bx bx-trash' style="color:var(--danger)"></i> Konfirmasi Hapus</h3>
+      <button class="modal-close" onclick="closeDelModal()"><i class='bx bx-x'></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="color:var(--ink2);line-height:1.7" id="del-message">Apakah kamu yakin ingin menghapus item ini?</p>
+      <p style="color:var(--ink4);font-size:12px;margin-top:12px;display:flex;align-items:center;gap:6px;background:var(--surface2);padding:10px 12px;border-radius:8px;border:1px solid var(--border)">
+        <i class='bx bx-error-circle' style="color:var(--warn);font-size:18px;flex-shrink:0"></i>
+        Data akan langsung dihapus dari GitHub. Tindakan ini tidak dapat dibatalkan.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn btn-ghost" id="del-cancel-btn" onclick="closeDelModal()">Batal</button>
+      <button class="topbar-btn btn-danger" id="del-confirm-btn">
+        <i class='bx bx-trash'></i> Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="js/pages/admin.js"></script>
+</body>
+</html>
