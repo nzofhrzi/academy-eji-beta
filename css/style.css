@@ -1,0 +1,12 @@
+/* ════════════════════════════════════════════════════
+   ACADEMY EJI - MAIN STYLESHEET
+   Import all CSS modules in correct order
+   ════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+@import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
+
+@import 'variables.css';
+@import 'base.css';
+@import 'layout.css';
+@import 'components.css';
