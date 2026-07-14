@@ -1,0 +1,27 @@
+{
+  "name": "academy-eji",
+  "version": "2.0.0",
+  "description": "Academy Eji - Platform Pembelajaran Interaktif",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 3000",
+    "start": "npm run dev",
+    "build": "echo 'Build process here'"
+  },
+  "keywords": [
+    "academy",
+    "learning",
+    "education",
+    "eji"
+  ],
+  "author": "Academy Eji Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/academy-eji"
+  },
+  "vercel": {
+    "buildCommand": "echo 'No build needed'",
+    "outputDirectory": "./"
+  }
+}
