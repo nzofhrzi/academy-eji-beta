@@ -1561,8 +1561,7 @@ players.forEach((p, i) => {
         </div>
         <div class="player-card-num">#${p.number}</div>
       </div>
-      <!-- UNCOMMENT dan ganti src dengan foto pemain (transparent PNG, contoh: photos/01.png) -->
-      <!-- <img src="photos/${p.number}.png" alt="${p.name}" onerror="this.style.display='none'"> -->
+      <img src="photos/${p.number}.png" alt="${p.name}" onerror="this.style.display='none'">
     </div>
     <div class="player-card-info">
       <div class="player-card-name">${p.name}</div>
@@ -1605,12 +1604,11 @@ function openModal(id) {
   photo.setAttribute('data-num', p.number);
   const oldImg = photo.querySelector('img');
   if (oldImg) oldImg.remove();
-  // UNCOMMENT untuk inject foto pemain di modal:
-  // const img = document.createElement('img');
-  // img.src = `photos/${p.number}.png`;
-  // img.alt = p.name;
-  // img.onerror = () => img.remove();
-  // photo.appendChild(img);
+  const img = document.createElement('img');
+  img.src = `photos/${p.number}.png`;
+  img.alt = p.name;
+  img.onerror = () => img.remove();
+  photo.appendChild(img);
 
   const statsContainer = document.getElementById('modal-stats');
   statsContainer.innerHTML = Object.entries(p.stats).map(([k, v]) => `
@@ -1786,4 +1784,3 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
 </body>
 </html>
-
