@@ -348,7 +348,7 @@ select {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url("https://picsum.photos/seed/eterna-acardia-stadium/1920/1200");
+  background-image: url("photos/bgh.png");
   background-size: cover;
   background-position: center;
   filter: brightness(0.35) contrast(1.1) saturate(0.7);
