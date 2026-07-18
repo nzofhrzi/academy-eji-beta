@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Soal Statistik</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1d3557 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: floatBg 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 30px 120px rgba(0,0,0,0.4);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: containerEntry 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes containerEntry {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #d4145a 100%);
+            color: white;
+            padding: 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .icon-badge {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            font-weight: 300;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        .slide-wrapper {
+            position: relative;
+            min-height: 650px;
+        }
+
+        .slide {
+            width: 100%;
+            padding: 60px 80px;
+            display: none;
+            animation: slideEnter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes slideEnter {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-title {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #0f3460;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: expandWidth 0.8s ease-out;
+        }
+
+        @keyframes expandWidth {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        .title-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            animation: rotateIcon 0.8s ease-out;
+        }
+
+        @keyframes rotateIcon {
+            from {
+                transform: rotate(-30deg) scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: rotate(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .subtitle-text {
+            color: #764ba2;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-weight: 600;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .content-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            border: 2px solid #e8ecff;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.6s ease-out;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(102, 126, 234, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
+        }
+
+        .content-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-label {
+            font-size: 0.9em;
+            color: #667eea;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            animation: tableSlide 0.6s ease-out;
+        }
+
+        @keyframes tableSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .data-table tr:hover {
+            background: linear-gradient(90deg, #f8f9ff, #f5f7ff);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .calculation-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fffdf0 100%);
+            border-left: 5px solid #ffc107;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.8;
+            animation: slideInLeft 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculation-box::before {
+            content: '';
+            position: absolute;
+            right: -50px;
+            top: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 193, 7, 0.1) 0%, transparent 70%);
+        }
+
+        .calculation-box {
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 5px solid #28a745;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            font-weight: 600;
+            color: #0f5132;
+            animation: slideInUp 0.6s ease-out;
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.15);
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, #e7f3ff 0%, #d9ebf7 100%);
+            border-left: 5px solid #2196F3;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.98em;
+            line-height: 1.9;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #fff59d 0%, #fff9c4 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #f57f17;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 30px 0;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .comparison-item {
+            background: white;
+            border: 3px solid #667eea;
+            padding: 30px;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        .comparison-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .comparison-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .comparison-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+        }
+
+        .comparison-title {
+            color: #667eea;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-title::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+        }
+
+        .stat-row {
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .stat-value {
+            color: #667eea;
+            font-size: 1.5em;
+            font-weight: 800;
+            font-family: 'Monaco', monospace;
+        }
+
+        .list-section {
+            margin: 25px 0;
+            padding: 25px;
+            background: #f5f7ff;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .list-item {
+            margin: 15px 0;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #333;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .list-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+        }
+
+        .title-slide {
+            text-align: center;
+            padding: 100px 80px !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-slide h2 {
+            font-size: 4em;
+            color: #0f3460;
+            margin-bottom: 25px;
+            font-weight: 800;
+            animation: slideInDown 0.8s ease-out;
+            letter-spacing: -2px;
+        }
+
+        .title-slide p {
+            font-size: 1.4em;
+            color: #666;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+            font-weight: 300;
+        }
+
+        .title-subtitle {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin: 20px 0;
+            font-weight: 600;
+            animation: slideInUp 0.8s ease-out 0.4s both;
+        }
+
+        .control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 80px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+            border-top: 1px solid #e8ecf1;
+            gap: 20px;
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .nav-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-button:active {
+            transform: translateY(0);
+        }
+
+        .nav-button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide-counter {
+            background: white;
+            color: #667eea;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1em;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.6s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .slide {
+                padding: 40px 50px;
+            }
+
+            .control-bar {
+                padding: 20px 50px;
+                flex-wrap: wrap;
+            }
+
+            .header {
+                padding: 40px;
+            }
+
+            .slide-title {
+                font-size: 2.2em;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 0.9em;
+            }
+
+            .data-table td, .data-table th {
+                padding: 12px 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px 25px;
+            }
+
+            .control-bar {
+                padding: 15px 25px;
+            }
+
+            .header {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .slide-title {
+                font-size: 1.8em;
+            }
+
+            .nav-button {
+                padding: 12px 25px;
+                font-size: 0.95em;
+            }
+
+            .icon-badge {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar" id="progressBar"></div>
+        
+        <div class="header">
+            <div class="header-content">
+                <div class="icon-badge">∑</div>
+                <h1>Jawaban Soal Statistik</h1>
+                <p>Analisis Data & Interpretasi Statistik Deskriptif</p>
+            </div>
+        </div>
+
+        <div class="slide-wrapper">
+            <!-- Slide 1: Judul -->
+            <div class="slide active title-slide">
+                <div style="animation: fadeInUp 0.8s ease-out 0.3s both;">
+                    <h2>Soal Statistik</h2>
+                    <p>Analisis Perbandingan Data & Deskripsi Statistik</p>
+                    <div class="title-subtitle">
+                        <div style="margin: 15px 0;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #667eea; border-radius: 50%; margin-right: 10px;"></span>
+                            Soal 1: Perbandingan Mean & Simpangan Baku
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #764ba2; border-radius: 50%; margin-right: 10px;"></span>
+                            Soal 2: Mean, Median, Modus & Pengaruh Outlier
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Soal 1 - Pengenalan -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">1</div>
+                    Perbandingan Dua Kelompok Data
+                </div>
+                
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Data Kelompok A & B
+                </div>
+            
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <div class="comparison-title">Kelompok A</div>
+                        <table class="data-table">
+                            <tr><th>Data</th><th>Nilai</th></tr>
+                            <tr><td>1</td><td>70</td></tr>
+                            <tr><td>2</td><td>72</td></tr>
+                            <tr><td>3</td><td>74</td></tr>
+                            <tr><td>4</td><td>76</td></tr>
+                            <tr><td>5</td><td>78</td></tr>
+                        </table>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-title">Kelompok B</div>
+                        <table class="data-table">
+                            <tr><th>Data</th><th>Nilai</th></tr>
+                            <tr><td>1</td><td>50</td></tr>
+                            <tr><td>2</td><td>60</td></tr>
+                            <tr><td>3</td><td>74</td></tr>
+                            <tr><td>4</td><td>88</td></tr>
+                            <tr><td>5</td><td>98</td></tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="list-section" style="margin-top: 40px;">
+                    <div style="color: #667eea; font-weight: 700; font-size: 1.1em; margin-bottom: 15px;">Yang Harus Dicari:</div>
+                    <div class="list-item">a. Mean masing-masing kelompok</div>
+                    <div class="list-item">b. Simpangan baku masing-masing kelompok</div>
+                    <div class="list-item">c. Kelompok mana yang lebih homogen</div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Soal 1 - Perhitungan Mean -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">Σ</div>
+                    Menghitung Mean (Rata-rata)
+                </div>
+                
+                <div class="formula-box">
+                    Mean (x̄) = (Σx) / n
+                </div>
+
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Kelompok A
+                </div>
+                <div class="calculation-box">
+Σx = 70 + 72 + 74 + 76 + 78 = 370
+n = 5
+
+Mean A = 370 / 5 = <span class="highlight-text">74</span>
+                </div>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #764ba2; border-radius: 50%; margin-right: 8px;"></span>
+                    Kelompok B
+                </div>
+                <div class="calculation-box">
+Σx = 50 + 60 + 74 + 88 + 98 = 370
+n = 5
+
+Mean B = 370 / 5 = <span class="highlight-text">74</span>
+                </div>
+
+                <div class="result-box">
+                    <div style="color: #0f5132; font-size: 1.1em;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                        HASIL: Kedua kelompok memiliki mean yang SAMA = 74
+                    </div>
+                    <div style="margin-top: 12px; color: #0f5132;">Namun, sebaran datanya sangat berbeda!</div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Soal 1 - Simpangan Baku Kelompok A -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">σ</div>
+                    Simpangan Baku Kelompok A
+                </div>
+                
+                <div class="formula-box">
+                    s = √[Σ(x - x̄)² / n]
+                </div>
+
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Langkah 1: Hitung Deviasi (x - x̄)
+                </div>
+                <table class="data-table">
+                    <tr><th>Data (x)</th><th>Deviasi (x - 74)</th><th>(x - 74)²</th></tr>
+                    <tr><td>70</td><td>-4</td><td>16</td></tr>
+                    <tr><td>72</td><td>-2</td><td>4</td></tr>
+                    <tr><td>74</td><td>0</td><td>0</td></tr>
+                    <tr><td>76</td><td>2</td><td>4</td></tr>
+                    <tr><td>78</td><td>4</td><td>16</td></tr>
+                </table>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Langkah 2: Hitung Varians
+                </div>
+                <div class="calculation-box">
+Σ(x - 74)² = 16 + 4 + 0 + 4 + 16 = 40
+
+Varians = 40 / 5 = 8
+                </div>
+
+                <div class="result-box">
+                    Simpangan Baku A = √8 = <span class="highlight-text">2.83</span>
+                </div>
+            </div>
+
+            <!-- Slide 5: Soal 1 - Simpangan Baku Kelompok B -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">σ</div>
+                    Simpangan Baku Kelompok B
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Langkah 1: Hitung Deviasi (x - x̄)
+                </div>
+                <table class="data-table">
+                    <tr><th>Data (x)</th><th>Deviasi (x - 74)</th><th>(x - 74)²</th></tr>
+                    <tr><td>50</td><td>-24</td><td>576</td></tr>
+                    <tr><td>60</td><td>-14</td><td>196</td></tr>
+                    <tr><td>74</td><td>0</td><td>0</td></tr>
+                    <tr><td>88</td><td>14</td><td>196</td></tr>
+                    <tr><td>98</td><td>24</td><td>576</td></tr>
+                </table>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Langkah 2: Hitung Varians
+                </div>
+                <div class="calculation-box">
+Σ(x - 74)² = 576 + 196 + 0 + 196 + 576 = 1.544
+
+Varians = 1.544 / 5 = 308.8
+                </div>
+
+                <div class="result-box">
+                    Simpangan Baku B = √308.8 = <span class="highlight-text">17.57</span>
+                </div>
+            </div>
+
+            <!-- Slide 6: Soal 1 - Perbandingan & Kesimpulan -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">⚖</div>
+                    Analisis Homogenitas Data
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perbandingan Hasil
+                </div>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <div class="comparison-title">Kelompok A</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Mean</span>
+                            <span class="stat-value">74</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Simpangan Baku</span>
+                            <span class="stat-value">2.83</span>
+                        </div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-title">Kelompok B</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Mean</span>
+                            <span class="stat-value">74</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Simpangan Baku</span>
+                            <span class="stat-value">17.57</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-box" style="margin-top: 40px;">
+                    <div style="font-size: 1.15em; margin-bottom: 15px; color: #0f5132;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                        <strong>Kelompok A lebih homogen (tersebar merata)</strong>
+                    </div>
+                    <div style="color: #0f5132; margin-left: 18px;">
+                        <div class="list-item" style="margin: 8px 0; padding-left: 0;">Simpangan baku A (2.83) &lt; Simpangan baku B (17.57)</div>
+                        <div class="list-item" style="margin: 8px 0; padding-left: 0;">Semakin kecil simpangan baku = data semakin homogen</div>
+                        <div class="list-item" style="margin: 8px 0; padding-left: 0;">Kelompok A: data berkisar 70-78 (rentang kecil)</div>
+                        <div class="list-item" style="margin: 8px 0; padding-left: 0;">Kelompok B: data berkisar 50-98 (rentang besar)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Soal 2 - Pengenalan -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">2</div>
+                    Analisis Tinggi Badan Mahasiswa
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Data Tinggi Badan (cm)
+                </div>
+                <div class="content-card">
+                    <div style="font-size: 1.15em; line-height: 1.8; color: #333; font-weight: 500;">
+                        160, 162, 163, 164, 165, 166, 167, 168, 169, 190
+                    </div>
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e8ecff; color: #667eea; font-weight: 700;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                        Jumlah data (n) = 10
+                    </div>
+                </div>
+
+                <div class="list-section">
+                    <div style="color: #667eea; font-weight: 700; font-size: 1.1em; margin-bottom: 15px;">Yang Harus Dicari:</div>
+                    <div class="list-item">a. Mean (rata-rata)</div>
+                    <div class="list-item">b. Median (nilai tengah)</div>
+                    <div class="list-item">c. Modus (nilai yang paling sering muncul)</div>
+                    <div class="list-item">d. Pengaruh nilai 190 terhadap mean & median</div>
+                </div>
+
+                <div class="result-box" style="background: linear-gradient(135deg, #fff3cd 0%, #fffdf0 100%); border-left-color: #ffc107; color: #856404;">
+                    <div style="color: #856404;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #ffc107; border-radius: 50%; margin-right: 10px;"></span>
+                        <strong>Perhatian:</strong> Nilai 190 adalah <span class="highlight-text" style="background: transparent; color: #f57f17;">OUTLIER</span> (data pencilan) karena jauh berbeda dari data lainnya!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Soal 2 - Mean -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">Σ</div>
+                    Menghitung Mean (Rata-rata)
+                </div>
+                
+                <div class="formula-box">
+                    Mean (x̄) = (Σx) / n
+                </div>
+
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perhitungan
+                </div>
+                <div class="calculation-box">
+Σx = 160 + 162 + 163 + 164 + 165 + 166 + 167 + 168 + 169 + 190
+Σx = 1.674
+
+Mean = 1.674 / 10 = <span class="highlight-text">167.4 cm</span>
+                </div>
+
+                <div class="result-box">
+                    <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                    Mean tinggi badan mahasiswa = 167.4 cm
+                </div>
+
+                <div class="content-card">
+                    <div class="card-label">Interpretasi</div>
+                    <div style="color: #333; line-height: 1.7;">
+                        Rata-rata tinggi badan mahasiswa PJKR adalah 167.4 cm, atau sekitar 167-168 cm.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Soal 2 - Median -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">│</div>
+                    Menghitung Median (Nilai Tengah)
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-label">Definisi Median</div>
+                    <div style="color: #333; line-height: 1.7;">
+                        Median adalah nilai tengah dari data yang sudah diurutkan.<br><br>
+                        Untuk n genap: Median = (data ke-n/2 + data ke-(n/2+1)) / 2
+                    </div>
+                </div>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Data Terurut
+                </div>
+                <table class="data-table" style="margin-bottom: 30px;">
+                    <tr><th>Posisi</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+                    <tr><th>Nilai</th><td>160</td><td>162</td><td>163</td><td>164</td><td style="background: #fff59d; font-weight: 700;">165</td><td style="background: #fff59d; font-weight: 700;">166</td><td>167</td><td>168</td><td>169</td><td>190</td></tr>
+                </table>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perhitungan
+                </div>
+                <div class="calculation-box">
+n = 10 (genap)
+Data ke-5 = 165
+Data ke-6 = 166
+
+Median = (165 + 166) / 2 = 331 / 2 = <span class="highlight-text">165.5 cm</span>
+                </div>
+
+                <div class="result-box">
+                    <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                    Median tinggi badan = 165.5 cm
+                </div>
+            </div>
+
+            <!-- Slide 10: Soal 2 - Modus -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">≡</div>
+                    Menghitung Modus (Nilai Paling Sering)
+                </div>
+                
+                <div class="content-card">
+                    <div class="card-label">Definisi Modus</div>
+                    <div style="color: #333; line-height: 1.7; font-size: 1.1em;">
+                        Modus adalah nilai yang paling sering muncul dalam kumpulan data.
+                    </div>
+                </div>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Frekuensi Setiap Nilai
+                </div>
+                
+                <div class="content-card">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; color: #333; font-weight: 500;">
+                        <div>160 → 1 kali</div>
+                        <div>162 → 1 kali</div>
+                        <div>163 → 1 kali</div>
+                        <div>164 → 1 kali</div>
+                        <div>165 → 1 kali</div>
+                        <div>166 → 1 kali</div>
+                        <div>167 → 1 kali</div>
+                        <div>168 → 1 kali</div>
+                        <div>169 → 1 kali</div>
+                        <div>190 → 1 kali</div>
+                    </div>
+                </div>
+
+                <div class="result-box">
+                    <div style="font-size: 1.15em; color: #0f5132;">
+                        <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                        <strong>MODUS = TIDAK ADA (Ø)</strong>
+                    </div>
+                    <div style="margin-top: 12px; color: #0f5132;">
+                        Alasan: Semua nilai muncul dengan frekuensi yang sama (1 kali).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Soal 2 - Pengaruh Outlier -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon" style="background: linear-gradient(135deg, #d4145a, #ffc107);">!</div>
+                    Pengaruh Nilai 190 (Outlier)
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perbandingan: Dengan vs Tanpa 190
+                </div>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <div class="comparison-title">DENGAN nilai 190</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Mean</span>
+                            <span class="stat-value">167.4 cm</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Median</span>
+                            <span class="stat-value">165.5 cm</span>
+                        </div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-title">TANPA nilai 190</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Mean</span>
+                            <span class="stat-value">164.9 cm</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Median</span>
+                            <span class="stat-value">165 cm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perhitungan Tanpa 190
+                </div>
+                <div class="calculation-box">
+Σx (tanpa 190) = 1.484
+Mean = 1.484 / 9 = 164.89 ≈ <span class="highlight-text">164.9 cm</span>
+
+Median dari 9 data = data ke-5 = <span class="highlight-text">165 cm</span>
+                </div>
+            </div>
+
+            <!-- Slide 12: Soal 2 - Kesimpulan Outlier -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">→</div>
+                    Kesimpulan Pengaruh Outlier 190
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    Perubahan Nilai
+                </div>
+                <table class="data-table" style="margin-bottom: 30px;">
+                    <tr><th>Ukuran</th><th>Dengan 190</th><th>Tanpa 190</th><th>Perubahan</th></tr>
+                    <tr>
+                        <td><strong>Mean</strong></td>
+                        <td>167.4 cm</td>
+                        <td>164.9 cm</td>
+                        <td style="color: #d4145a; font-weight: 700;">+2.5 cm <span style="font-size: 0.85em;">↑</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Median</strong></td>
+                        <td>165.5 cm</td>
+                        <td>165 cm</td>
+                        <td style="color: #ffc107; font-weight: 700;">+0.5 cm <span style="font-size: 0.85em;">↑</span></td>
+                    </tr>
+                </table>
+
+                <div class="result-box">
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 1.1em; color: #0f5132; margin-bottom: 15px;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #28a745; border-radius: 50%; margin-right: 10px;"></span>
+                            <strong>KESIMPULAN</strong>
+                        </div>
+                    </div>
+                    
+                    <div class="list-item" style="padding-left: 0; margin-bottom: 15px; color: #0f5132;">
+                        <strong>Mean SANGAT TERPENGARUH</strong> (+2.5 cm)<br>
+                        <span style="color: #0f5132; margin-left: 18px; display: inline-block;">Mean meningkat signifikan karena 190 jauh di atas rata-rata</span>
+                    </div>
+                    
+                    <div class="list-item" style="padding-left: 0; margin-bottom: 15px; color: #0f5132;">
+                        <strong>Median SEDIKIT TERPENGARUH</strong> (+0.5 cm)<br>
+                        <span style="color: #0f5132; margin-left: 18px; display: inline-block;">Median relatif stabil karena hanya melihat nilai tengah</span>
+                    </div>
+                    
+                    <div class="list-item" style="padding-left: 0; color: #0f5132;">
+                        <strong>Insight Penting:</strong><br>
+                        <span style="color: #0f5132; margin-left: 18px; display: inline-block;">Outlier berpengaruh besar pada Mean → Median lebih robust!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Ringkasan -->
+            <div class="slide">
+                <div class="slide-title">
+                    <div class="title-icon">✓</div>
+                    Ringkasan Jawaban
+                </div>
+                
+                <div class="subtitle-text" style="margin-top: 35px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #667eea; border-radius: 50%; margin-right: 8px;"></span>
+                    SOAL 1: Perbandingan Kelompok Data
+                </div>
+                <div class="content-card">
+                    <div style="color: #333;">
+                        <div style="margin: 12px 0; font-weight: 600;">a. Mean:</div>
+                        <div class="list-item" style="padding-left: 35px;">Kelompok A = 74</div>
+                        <div class="list-item" style="padding-left: 35px;">Kelompok B = 74</div>
+                        
+                        <div style="margin-top: 18px; margin-bottom: 12px; font-weight: 600;">b. Simpangan Baku:</div>
+                        <div class="list-item" style="padding-left: 35px;">Kelompok A = 2.83</div>
+                        <div class="list-item" style="padding-left: 35px;">Kelompok B = 17.57</div>
+                        
+                        <div style="margin-top: 18px; margin-bottom: 12px; font-weight: 600;">c. Homogenitas:</div>
+                        <div class="list-item" style="padding-left: 35px;">Kelompok A lebih homogen (σ lebih kecil)</div>
+                    </div>
+                </div>
+
+                <div class="subtitle-text">
+                    <span style="display: inline-block; width: 6px; height: 6px; background: #764ba2; border-radius: 50%; margin-right: 8px;"></span>
+                    SOAL 2: Analisis Tinggi Badan
+                </div>
+                <div class="content-card">
+                    <div style="color: #333;">
+                        <div class="list-item">a. Mean = <span class="highlight-text">167.4 cm</span></div>
+                        <div class="list-item">b. Median = <span class="highlight-text">165.5 cm</span></div>
+                        <div class="list-item">c. Modus = <span class="highlight-text">Tidak ada</span></div>
+                        <div class="list-item">d. Pengaruh 190: Mean naik <span class="highlight-text">2.5 cm</span>, Median naik <span class="highlight-text">0.5 cm</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-bar">
+            <button class="nav-button" onclick="previousSlide()"><span>← Sebelumnya</span></button>
+            <div class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">13</span>
+            </div>
+            <button class="nav-button" onclick="nextSlide()"><span>Selanjutnya →</span></button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = document.querySelectorAll('.slide').length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function updateProgress() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+            
+            if (n > totalSlides) {
+                currentSlide = totalSlides;
+            }
+            if (n < 1) {
+                currentSlide = 1;
+            }
+            
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            slides[currentSlide - 1].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide;
+            updateProgress();
+            
+            // Scroll to top
+            document.querySelector('.slide-wrapper').scrollTop = 0;
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            }
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        // Initialize
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>
