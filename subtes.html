@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Football Skill Assessment System &mdash; Eterna Acardia</title>
+<style>
+
+/* =========================================================
+   Football Skill Assessment System — Eterna Acardia
+   Design language: EA SPORTS FC x Sofascore x Apple
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  /* ---- Color tokens ---- */
+  --bg-deep:#05070f;
+  --bg-panel:#0b1226;
+  --bg-panel-2:#101a38;
+  --navy:#152047;
+  --navy-soft:#1e2c5c;
+  --gold:#d4af37;
+  --gold-bright:#f2d675;
+  --gold-deep:#8a6c1a;
+  --white:#f5f7fb;
+  --text-dim:#8c93b5;
+  --text-faint:#5d6389;
+  --danger:#e5484d;
+  --success:#34c77b;
+
+  /* stat accent colors (FIFA/EA FC vernacular) */
+  --pac:#4ade80;
+  --sho:#f97066;
+  --pas:#60a5fa;
+  --dri:#c084fc;
+  --def:#2dd4bf;
+  --phy:#fbbf24;
+
+  /* tiers */
+  --tier-bronze:#cd7f32;
+  --tier-silver:#c7cdd9;
+  --tier-gold:#d4af37;
+  --tier-elite:#f2d675;
+
+  --radius-s:10px;
+  --radius-m:16px;
+  --radius-l:22px;
+
+  --font-display:'Rajdhani','Arial Narrow',sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(30,44,92,.55), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(212,175,55,.08), transparent 55%),
+    var(--bg-deep);
+  color:var(--white);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+}
+
+button{ font-family:inherit; }
+input,select{ font-family:inherit; }
+
+::selection{ background:var(--gold); color:var(--bg-deep); }
+
+:focus-visible{
+  outline:2px solid var(--gold-bright);
+  outline-offset:2px;
+}
+
+/* ---------- layout shell ---------- */
+.app{
+  max-width:1180px;
+  margin:0 auto;
+  padding:20px 20px 60px;
+}
+
+.glass{
+  background:linear-gradient(155deg, rgba(21,32,71,.65), rgba(11,18,38,.75));
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(212,175,55,.16);
+  border-radius:var(--radius-m);
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
+}
+
+/* ---------- header ---------- */
+.app-header{ padding:14px 4px 26px; }
+.brand{ display:flex; align-items:center; gap:16px; }
+.brand-logo{
+  width:56px; height:56px; flex:0 0 auto;
+  border-radius:16px;
+  background:linear-gradient(150deg, var(--gold-bright), var(--gold) 55%, var(--gold-deep));
+  color:var(--bg-deep);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display);
+  font-weight:700; font-size:22px; letter-spacing:1px;
+  box-shadow:0 8px 24px -6px rgba(212,175,55,.55), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.brand-text h1{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:clamp(20px,3.4vw,30px);
+  letter-spacing:.3px;
+  margin:0;
+  background:linear-gradient(90deg, var(--white), var(--gold-bright) 120%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.brand-text p{
+  margin:2px 0 0; color:var(--text-dim); font-size:13px; letter-spacing:.4px;
+  text-transform:uppercase;
+}
+
+/* ---------- views ---------- */
+.view{ display:none; }
+.view.active{ display:block; animation:fadeIn .35s ease; }
+
+.btn-back{
+  background:none; border:none; color:var(--text-dim);
+  font-size:14px; cursor:pointer; padding:8px 4px; margin-bottom:10px;
+  transition:color .2s ease;
+}
+.btn-back:hover{ color:var(--gold-bright); }
+
+/* ---------- buttons ---------- */
+.btn{
+  position:relative; overflow:hidden;
+  border-radius:12px; border:1px solid transparent;
+  padding:12px 20px; font-size:14.5px; font-weight:600;
+  cursor:pointer; transition:transform .15s ease, box-shadow .2s ease, filter .2s ease;
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+}
+.btn:active{ transform:scale(.97); }
+.btn-icon{ font-size:16px; line-height:1; }
+
+.btn-primary{
+  background:linear-gradient(135deg, var(--gold-bright), var(--gold) 60%, var(--gold-deep));
+  color:#191305;
+  box-shadow:0 10px 26px -10px rgba(212,175,55,.55);
+}
+.btn-primary:hover{ filter:brightness(1.07); }
+
+.btn-secondary{
+  background:rgba(96,131,255,.08);
+  border-color:rgba(212,175,55,.35);
+  color:var(--gold-bright);
+}
+.btn-secondary:hover{ background:rgba(212,175,55,.12); }
+
+.btn-ghost{
+  background:transparent; border-color:rgba(245,247,251,.18); color:var(--text-dim);
+}
+.btn-ghost:hover{ color:var(--white); border-color:rgba(245,247,251,.35); }
+
+.btn-danger{
+  background:rgba(229,72,77,.14); border-color:rgba(229,72,77,.4); color:#ff8b8f;
+}
+.btn-danger:hover{ background:rgba(229,72,77,.24); }
+
+.btn-block{ width:100%; }
+.btn-large{ padding:15px 24px; font-size:16px; }
+
+.ripple{
+  position:absolute; border-radius:50%; transform:scale(0);
+  background:rgba(255,255,255,.5); animation:rippleAnim .55s ease-out forwards;
+  pointer-events:none;
+}
+@keyframes rippleAnim{ to{ transform:scale(3); opacity:0; } }
+
+/* ---------- dashboard toolbar ---------- */
+.dashboard-toolbar{
+  display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;
+  padding:18px; margin-bottom:20px;
+}
+.toolbar-controls{ display:flex; gap:10px; flex-wrap:wrap; flex:1; justify-content:flex-end; }
+#searchInput, #sortSelect{
+  background:rgba(5,7,15,.55); border:1px solid rgba(245,247,251,.14);
+  color:var(--white); padding:10px 14px; border-radius:10px; font-size:14px;
+  min-width:180px;
+}
+#searchInput:focus, #sortSelect:focus{ border-color:var(--gold); }
+
+/* ---------- stats grid ---------- */
+.stats-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px; margin-bottom:22px;
+}
+.stat-card{
+  padding:16px; border-radius:var(--radius-s);
+  background:linear-gradient(160deg, rgba(21,32,71,.6), rgba(11,18,38,.7));
+  border:1px solid rgba(212,175,55,.12);
+  transition:transform .2s ease, border-color .2s ease;
+}
+.stat-card:hover{ transform:translateY(-3px); border-color:rgba(212,175,55,.35); }
+.stat-card .stat-label{
+  font-size:11px; letter-spacing:.6px; text-transform:uppercase; color:var(--text-dim);
+}
+.stat-card .stat-value{
+  font-family:var(--font-display); font-weight:700; font-size:26px; margin-top:4px;
+  color:var(--white);
+}
+.stat-card .stat-sub{ font-size:12px; color:var(--text-faint); margin-top:2px; }
+.stat-card.accent .stat-value{ color:var(--gold-bright); }
+
+/* ---------- player list ---------- */
+.player-list{ display:flex; flex-direction:column; gap:10px; }
+
+.player-row{
+  display:flex; align-items:center; gap:16px; padding:14px 18px;
+  border-radius:var(--radius-s); cursor:default;
+  animation:slideUp .35s ease both;
+  transition:border-color .2s ease, transform .2s ease;
+}
+.player-row:hover{ border-color:rgba(212,175,55,.4); transform:translateY(-2px); }
+
+.player-avatar{
+  width:46px; height:46px; border-radius:50%; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-display); font-weight:700; font-size:16px;
+  color:#191305;
+  background:linear-gradient(150deg, var(--tier-silver), #8890a8);
+}
+.player-avatar.tier-bronze{ background:linear-gradient(150deg,#e3a469,var(--tier-bronze)); }
+.player-avatar.tier-silver{ background:linear-gradient(150deg,#eef0f5,var(--tier-silver)); }
+.player-avatar.tier-gold{ background:linear-gradient(150deg,var(--gold-bright),var(--tier-gold)); }
+.player-avatar.tier-elite{ background:linear-gradient(150deg,#fff6da,var(--tier-elite)); box-shadow:0 0 16px rgba(242,214,117,.6); }
+
+.player-info{ flex:1 1 160px; min-width:0; }
+.player-info h3{ margin:0; font-size:15.5px; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.player-info p{ margin:2px 0 0; font-size:12.5px; color:var(--text-dim); }
+
+.player-mini-stats{
+  display:none; gap:10px; font-size:11.5px; color:var(--text-dim);
+  font-family:var(--font-display); letter-spacing:.3px;
+}
+.player-mini-stats span b{ color:var(--white); font-weight:700; margin-left:3px; }
+
+.player-ovr{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  width:58px; flex:0 0 auto; padding:4px 0; border-radius:10px;
+  border:1px solid rgba(212,175,55,.25);
+}
+.player-ovr .ovr-value{ font-family:var(--font-display); font-weight:700; font-size:22px; line-height:1; }
+.player-ovr .ovr-label{ font-size:9px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-dim); margin-top:2px; }
+.player-ovr.tier-bronze .ovr-value{ color:var(--tier-bronze); }
+.player-ovr.tier-silver .ovr-value{ color:var(--tier-silver); }
+.player-ovr.tier-gold .ovr-value{ color:var(--tier-gold); }
+.player-ovr.tier-elite .ovr-value{ color:var(--tier-elite); text-shadow:0 0 12px rgba(242,214,117,.7); }
+
+.player-actions{ display:flex; gap:6px; flex:0 0 auto; }
+.player-actions button{
+  background:rgba(245,247,251,.06); border:1px solid rgba(245,247,251,.12);
+  color:var(--text-dim); font-size:12px; padding:7px 11px; border-radius:8px;
+  cursor:pointer; transition:all .18s ease;
+}
+.player-actions button:hover{ color:var(--white); border-color:var(--gold); }
+.player-actions button[data-action="delete"]:hover{ color:#ff8b8f; border-color:var(--danger); }
+
+.empty-state{
+  text-align:center; padding:60px 20px; color:var(--text-dim);
+}
+.empty-state.hidden, .hidden{ display:none !important; }
+.empty-icon{ font-size:42px; margin-bottom:10px; }
+.empty-state p{ font-size:16px; color:var(--white); margin:0 0 4px; }
+.empty-state span{ font-size:13px; }
+
+/* ---------- form card ---------- */
+.form-card{ max-width:460px; margin:20px auto; padding:28px; }
+.form-card h2{ font-family:var(--font-display); font-size:24px; margin:0 0 6px; }
+.form-sub{ color:var(--text-dim); font-size:13px; margin:0 0 20px; }
+.form-group{ margin-bottom:18px; }
+.form-group label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:6px; }
+.form-group input{
+  width:100%; background:rgba(5,7,15,.55); border:1px solid rgba(245,247,251,.14);
+  color:var(--white); padding:12px 14px; border-radius:10px; font-size:15px;
+  transition:border-color .2s ease;
+}
+.form-group input:focus{ border-color:var(--gold); }
+.form-group.error input{ border-color:var(--danger); animation:shake .3s ease; }
+.field-error{ display:block; color:#ff8b8f; font-size:12px; margin-top:5px; min-height:14px; }
+
+/* ---------- assessment ---------- */
+.assessment-header{
+  display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; justify-content:space-between;
+  margin-bottom:18px;
+}
+.assessment-header h2{ font-family:var(--font-display); font-size:24px; margin:0 0 4px; }
+.live-scores{ display:flex; gap:8px; flex-wrap:wrap; }
+.live-chip{
+  padding:6px 12px; border-radius:20px; font-family:var(--font-display); font-weight:600;
+  font-size:13px; border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.04);
+  display:flex; gap:6px; align-items:center;
+}
+.live-chip .dot{ width:7px; height:7px; border-radius:50%; }
+
+.category-grid{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:16px; margin-bottom:24px;
+}
+.category-card{
+  padding:18px; border-radius:var(--radius-m); position:relative; overflow:hidden;
+  animation:slideUp .3s ease both;
+}
+.category-card::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
+  background:var(--cat-color, var(--gold));
+}
+.category-card-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; }
+.category-card-head h3{
+  margin:0; font-family:var(--font-display); font-weight:700; font-size:18px;
+  color:var(--cat-color, var(--gold-bright)); letter-spacing:.5px;
+}
+.category-card-head span{ font-size:11.5px; color:var(--text-dim); }
+.category-card-score{
+  font-family:var(--font-display); font-weight:700; font-size:20px; color:var(--white);
+}
+.field-row{ margin-bottom:12px; }
+.field-row:last-child{ margin-bottom:0; }
+.field-row label{ display:flex; justify-content:space-between; font-size:12.5px; color:var(--text-dim); margin-bottom:5px; }
+.field-row input{
+  width:100%; background:rgba(5,7,15,.5); border:1px solid rgba(245,247,251,.12);
+  color:var(--white); padding:9px 12px; border-radius:8px; font-size:14px;
+}
+.field-row input:focus{ border-color:var(--cat-color, var(--gold)); }
+.field-row.error input{ border-color:var(--danger); animation:shake .3s ease; }
+.field-row .field-error{ margin-top:3px; }
+
+/* ---------- result / detail layout ---------- */
+.result-layout{
+  display:grid; grid-template-columns:340px 1fr; gap:24px; align-items:start;
+}
+@media (max-width:840px){ .result-layout{ grid-template-columns:1fr; } }
+
+.player-card-wrap{ display:flex; justify-content:center; }
+
+.player-card{
+  width:300px; padding:22px 20px 26px; border-radius:24px; position:relative; overflow:hidden;
+  background:linear-gradient(165deg, var(--navy-soft) 0%, var(--bg-panel) 55%, var(--bg-deep) 100%);
+  border:1px solid rgba(212,175,55,.3);
+  box-shadow:0 30px 60px -25px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.05);
+  animation:fadeIn .5s ease;
+}
+.player-card.tier-elite{ border-color:rgba(242,214,117,.65); box-shadow:0 0 40px -8px rgba(242,214,117,.35), 0 30px 60px -25px rgba(0,0,0,.7); }
+.player-card.tier-gold{ border-color:rgba(212,175,55,.55); }
+.player-card.tier-silver{ border-color:rgba(199,205,217,.5); }
+.player-card.tier-bronze{ border-color:rgba(205,127,50,.5); }
+
+.card-shine{
+  position:absolute; inset:-40%; pointer-events:none;
+  background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.12) 48%, rgba(255,255,255,.22) 50%, rgba(255,255,255,.12) 52%, transparent 60%);
+  animation:shimmer 4.5s ease-in-out infinite;
+}
+.card-top{ display:flex; justify-content:space-between; align-items:center; position:relative; }
+.card-ovr{ font-family:var(--font-display); font-weight:700; font-size:48px; line-height:1; color:var(--gold-bright); text-shadow:0 0 22px rgba(242,214,117,.4); }
+.card-tier{
+  font-family:var(--font-display); font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:5px 10px; border-radius:20px; border:1px solid rgba(212,175,55,.4); color:var(--gold-bright);
+}
+.card-name{ font-family:var(--font-display); font-weight:700; font-size:22px; margin-top:10px; letter-spacing:.4px; }
+.card-sub{ font-size:12px; color:var(--text-dim); margin-top:2px; margin-bottom:6px; }
+.card-radar{ display:block; margin:6px auto 4px; }
+.card-stats{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px 6px; margin-top:8px;
+  padding-top:14px; border-top:1px solid rgba(245,247,251,.1);
+}
+.card-stats div{ display:flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-display); font-weight:600; font-size:14px; }
+.card-stats div span{ color:var(--text-dim); font-size:12px; }
+.card-stats div b{ color:var(--white); }
+
+.result-details{ padding:22px; }
+.result-details h3{ font-family:var(--font-display); font-size:18px; margin:0 0 14px; color:var(--gold-bright); }
+.breakdown-row{
+  display:flex; justify-content:space-between; align-items:center; padding:9px 0;
+  border-bottom:1px solid rgba(245,247,251,.06); font-size:14px;
+}
+.breakdown-row:last-child{ border-bottom:none; }
+.breakdown-row .bd-bar{ flex:1; height:6px; margin:0 12px; border-radius:6px; background:rgba(255,255,255,.08); overflow:hidden; }
+.breakdown-row .bd-bar > span{ display:block; height:100%; border-radius:6px; }
+.breakdown-row .bd-val{ font-family:var(--font-display); font-weight:700; width:34px; text-align:right; }
+
+.result-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; justify-content:center; }
+
+/* ---------- modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(2,4,10,.68);
+  display:flex; align-items:center; justify-content:center; z-index:100;
+  padding:20px; animation:fadeIn .2s ease;
+}
+.modal{ width:100%; max-width:380px; padding:24px; text-align:center; }
+.modal h3{ margin:0 0 10px; font-family:var(--font-display); font-size:19px; }
+.modal p{ color:var(--text-dim); font-size:14px; margin:0 0 20px; }
+.modal-actions{ display:flex; gap:10px; justify-content:center; }
+
+/* ---------- toast ---------- */
+.toast-container{
+  position:fixed; top:18px; right:18px; z-index:200;
+  display:flex; flex-direction:column; gap:10px; max-width:320px;
+}
+.toast{
+  padding:13px 16px; border-radius:12px; font-size:13.5px; color:var(--white);
+  background:linear-gradient(155deg, rgba(21,32,71,.9), rgba(11,18,38,.95));
+  border:1px solid rgba(212,175,55,.3); box-shadow:0 15px 30px -12px rgba(0,0,0,.6);
+  animation:slideIn .3s ease;
+}
+.toast.success{ border-color:rgba(52,199,123,.5); }
+.toast.error{ border-color:rgba(229,72,77,.5); }
+.toast.fade-out{ animation:fadeOutRight .3s ease forwards; }
+
+/* ---------- footer ---------- */
+.app-footer{
+  margin-top:50px; padding-top:18px; border-top:1px solid rgba(245,247,251,.08);
+  display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center;
+  color:var(--text-faint); font-size:12.5px;
+}
+.footer-actions{ display:flex; gap:16px; }
+.btn-link{
+  background:none; border:none; color:var(--text-dim); font-size:12.5px; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px; padding:0;
+}
+.btn-link:hover{ color:var(--gold-bright); }
+.file-label{ cursor:pointer; }
+
+/* ---------- animations ---------- */
+@keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes fadeOutRight{ to{ opacity:0; transform:translateX(30px); } }
+@keyframes slideUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+.slide-up{ animation:slideUp .3s ease; }
+@keyframes slideIn{ from{ opacity:0; transform:translateX(30px); } to{ opacity:1; transform:translateX(0); } }
+@keyframes shake{ 0%,100%{ transform:translateX(0); } 25%{ transform:translateX(-5px); } 75%{ transform:translateX(5px); } }
+@keyframes shimmer{ 0%,100%{ transform:translateX(-8%) translateY(-4%) rotate(0deg); } 50%{ transform:translateX(8%) translateY(4%) rotate(1deg); } }
+.fade-in{ animation:fadeIn .35s ease; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+}
+
+/* ---------- info button + info modal ---------- */
+.info-btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:16px; height:16px; border-radius:50%; margin-left:5px;
+  background:rgba(212,175,55,.16); border:1px solid rgba(212,175,55,.4);
+  color:var(--gold-bright); font-family:Georgia,'Times New Roman',serif; font-style:italic; font-weight:700;
+  font-size:10.5px; line-height:1; cursor:pointer; padding:0; vertical-align:middle;
+  transition:background .18s ease, transform .18s ease;
+}
+.info-btn:hover{ background:rgba(212,175,55,.32); transform:scale(1.1); }
+
+.info-modal{ max-width:480px; text-align:left; max-height:82vh; display:flex; flex-direction:column; }
+.info-modal h3{ font-family:var(--font-display); color:var(--gold-bright); }
+.info-modal-body{
+  overflow-y:auto; padding-right:4px; color:var(--white); font-size:13.5px; line-height:1.55;
+}
+.info-modal-body p{ margin:0 0 10px; }
+.info-modal-body b{ color:var(--gold-bright); }
+.info-modal-body ol.guide-steps{ margin:0 0 10px; padding-left:20px; }
+.info-modal-body ol.guide-steps li{ margin-bottom:6px; color:var(--text-dim); }
+.info-modal .modal-actions{ margin-top:16px; }
+
+.rubric-table{
+  width:100%; border-collapse:collapse; margin:6px 0 10px; font-size:12.5px;
+}
+.rubric-table th, .rubric-table td{
+  text-align:left; padding:6px 10px; border-bottom:1px solid rgba(245,247,251,.1);
+}
+.rubric-table th{ color:var(--text-dim); font-weight:600; text-transform:uppercase; font-size:11px; letter-spacing:.4px; }
+.rubric-table td{ color:var(--white); }
+
+/* ---------- testing guide page ---------- */
+.guide-topbar{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+.guide-section{
+  padding:20px; border-radius:var(--radius-m); margin-bottom:18px; position:relative; overflow:hidden;
+}
+.guide-section::before{
+  content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--cat-color, var(--gold));
+}
+.guide-section-head h2{
+  font-family:var(--font-display); font-weight:700; font-size:20px; margin:0 0 14px;
+  color:var(--cat-color, var(--gold-bright));
+}
+.guide-section-head h2 span{ color:var(--text-dim); font-weight:500; font-size:15px; }
+.guide-field{
+  border:1px solid rgba(245,247,251,.1); border-radius:12px; padding:4px 14px; margin-bottom:10px;
+  background:rgba(255,255,255,.02);
+}
+.guide-field:last-child{ margin-bottom:0; }
+.guide-field summary{
+  cursor:pointer; padding:10px 0; font-family:var(--font-display); font-weight:700; font-size:15.5px;
+  list-style:revert;
+}
+.guide-field-unit{ color:var(--text-dim); font-weight:500; font-size:12.5px; }
+.guide-field-body{ padding:2px 0 14px; font-size:13.5px; color:var(--white); line-height:1.55; }
+.guide-field-body p{ margin:0 0 10px; }
+.guide-field-body b{ color:var(--gold-bright); }
+.guide-field-body ol.guide-steps{ margin:0 0 10px; padding-left:20px; }
+.guide-field-body ol.guide-steps li{ margin-bottom:6px; color:var(--text-dim); }
+
+/* ---------- print styles (Panduan Pengujian) ---------- */
+@media print{
+  body{ background:#fff !important; color:#111 !important; }
+  .app-header, .app-footer, .btn-back, .guide-topbar #btnPrintGuide,
+  #toastContainer, .modal-overlay, #view-dashboard, #view-new,
+  #view-assessment, #view-result, #view-detail{ display:none !important; }
+  #view-guide{ display:block !important; }
+  .glass, .guide-section, .guide-field{
+    background:#fff !important; border:1px solid #ccc !important; box-shadow:none !important;
+    backdrop-filter:none !important; color:#111 !important;
+  }
+  .guide-section-head h2, .guide-field summary, .info-modal-body b, .guide-field-body b{ color:#111 !important; }
+  .card-shine{ display:none !important; }
+  a[href]::after{ content:''; }
+}
+
+/* ---------- responsive tweaks ---------- */
+@media (min-width:640px){
+  .player-mini-stats{ display:flex; }
+}
+@media (max-width:520px){
+  .app{ padding:14px 12px 40px; }
+  .dashboard-toolbar{ flex-direction:column; align-items:stretch; }
+  .toolbar-controls{ justify-content:stretch; }
+  #searchInput, #sortSelect{ flex:1; min-width:0; }
+  .player-row{ flex-wrap:wrap; }
+  .player-actions{ width:100%; justify-content:flex-end; }
+  .brand-logo{ width:46px; height:46px; font-size:18px; }
+}
+
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal glass slide-up">
+      <h3 id="confirmTitle">Konfirmasi</h3>
+      <p id="confirmMessage">Apakah Anda yakin?</p>
+      <div class="modal-actions">
+        <button id="confirmCancelBtn" class="btn btn-ghost">Batal</button>
+        <button id="confirmOkBtn" class="btn btn-danger">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="infoModal" class="modal-overlay hidden">
+    <div class="modal glass slide-up info-modal">
+      <h3 id="infoModalTitle">Instruksi Tes</h3>
+      <div id="infoModalBody" class="info-modal-body"></div>
+      <div class="modal-actions">
+        <button id="infoModalCloseBtn" class="btn btn-secondary">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">EA</div>
+      <div class="brand-text">
+        <h1>Football Skill Assessment System</h1>
+        <p>Professional Football Rating Calculator &middot; Eterna Acardia</p>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+
+    <!-- ============ DASHBOARD ============ -->
+    <section id="view-dashboard" class="view active">
+      <div class="dashboard-toolbar glass">
+        <button id="btnNewMeasurement" class="btn btn-primary">
+          <span class="btn-icon">+</span> Tambah Pengukuran Baru
+        </button>
+        <button id="btnGuide" class="btn btn-secondary">
+          <span class="btn-icon">&#128203;</span> Panduan Pengujian
+        </button>
+        <div class="toolbar-controls">
+          <input type="search" id="searchInput" placeholder="Cari nama pemain..." autocomplete="off" />
+          <select id="sortSelect" aria-label="Urutkan">
+            <option value="ovr-desc">OVR Tertinggi</option>
+            <option value="ovr-asc">OVR Terendah</option>
+            <option value="newest">Data Terbaru</option>
+            <option value="oldest">Data Terlama</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="statsGrid" class="stats-grid"></div>
+
+      <div id="playerListContainer" class="player-list"></div>
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-icon">&#9917;</div>
+        <p>Belum ada data pemain.</p>
+        <span>Tekan &ldquo;Tambah Pengukuran Baru&rdquo; untuk memulai penilaian pertama.</span>
+      </div>
+    </section>
+
+    <!-- ============ NEW MEASUREMENT FORM ============ -->
+    <section id="view-new" class="view">
+      <button class="btn-back" data-back="view-dashboard">&larr; Kembali ke Dashboard</button>
+      <div class="form-card glass fade-in">
+        <h2>Pengukuran Baru</h2>
+        <p class="form-sub">Masukkan identitas pemain. Tanggal pengukuran dicatat otomatis oleh sistem.</p>
+        <div class="form-group">
+          <label for="inputName">Nama Pemain</label>
+          <input id="inputName" type="text" placeholder="Contoh: Rizky Pratama" autocomplete="off" />
+          <span class="field-error" id="errName"></span>
+        </div>
+        <div class="form-group">
+          <label for="inputAge">Umur</label>
+          <input id="inputAge" type="number" min="5" max="60" placeholder="Contoh: 17" />
+          <span class="field-error" id="errAge"></span>
+        </div>
+        <button id="btnStartAssessment" class="btn btn-primary btn-block">Lanjut ke Pengujian &rarr;</button>
+      </div>
+    </section>
+
+    <!-- ============ ASSESSMENT (6 CATEGORIES) ============ -->
+    <section id="view-assessment" class="view">
+      <button class="btn-back" data-back="view-dashboard">&larr; Kembali ke Dashboard</button>
+      <div class="assessment-header">
+        <div>
+          <h2 id="assessmentPlayerName">Pengujian Keterampilan</h2>
+          <p class="form-sub">Isi seluruh hasil tes untuk keenam kategori di bawah ini.</p>
+        </div>
+        <div class="live-scores" id="liveScores"></div>
+      </div>
+      <div id="categoryGrid" class="category-grid"></div>
+      <button id="btnCalculate" class="btn btn-primary btn-block btn-large">Hitung Rating &amp; Lihat Hasil &rarr;</button>
+    </section>
+
+    <!-- ============ RESULT (AFTER CALCULATE) ============ -->
+    <section id="view-result" class="view">
+      <button class="btn-back" data-back="view-dashboard">&larr; Kembali ke Dashboard</button>
+      <div class="result-layout">
+        <div class="player-card-wrap" id="playerCardWrap"></div>
+        <div class="result-details glass" id="resultDetails"></div>
+      </div>
+      <div class="result-actions">
+        <button id="btnSave" class="btn btn-primary btn-large">Simpan Data</button>
+      </div>
+    </section>
+
+    <!-- ============ PLAYER DETAIL ============ -->
+    <section id="view-detail" class="view">
+      <button class="btn-back" data-back="view-dashboard">&larr; Kembali ke Dashboard</button>
+      <div class="result-layout">
+        <div class="player-card-wrap" id="detailCardWrap"></div>
+        <div class="result-details glass" id="detailDetails"></div>
+      </div>
+      <div class="result-actions">
+        <button id="btnDetailEdit" class="btn btn-secondary">Edit Data</button>
+        <button id="btnDetailExport" class="btn btn-ghost">Export Player Card (PNG)</button>
+        <button id="btnDetailDelete" class="btn btn-danger">Hapus Data</button>
+      </div>
+    </section>
+
+    <!-- ============ TESTING GUIDE ============ -->
+    <section id="view-guide" class="view">
+      <div class="guide-topbar">
+        <button class="btn-back" data-back="view-dashboard">&larr; Kembali ke Dashboard</button>
+        <button id="btnPrintGuide" class="btn btn-ghost">&#128424; Cetak Panduan</button>
+      </div>
+      <div class="assessment-header">
+        <div>
+          <h2>Panduan Pengujian</h2>
+        </div>
+      </div>
+      <div id="guideContent"></div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; Eterna Acardia &middot; Football Skill Assessment System</p>
+    <div class="footer-actions">
+      <button id="btnExportJson" class="btn-link">Export Database (JSON)</button>
+      <label class="btn-link file-label">
+        Import Database (JSON)
+        <input type="file" id="importJsonInput" accept="application/json" hidden />
+      </label>
+    </div>
+  </footer>
+</div>
+
+<canvas id="hiddenExportCanvas" width="800" height="480" style="display:none;"></canvas>
+
+<script>
+
+/* =========================================================================
+   Football Skill Assessment System — Eterna Acardia
+   Vanilla JS, offline-first, LocalStorage persistence.
+
+   ARCHITECTURE NOTE:
+   All scoring rules (which sub-tests belong to which category, their
+   measurement units, valid ranges, conversion benchmarks and weights)
+   live in the single CONFIG object below. To add/adjust a test, change
+   its weight, or add a brand-new category, edit CONFIG only — every
+   render/validation/calculation function reads from it dynamically.
+
+   EXTENSION POINTS (future development, not built yet but the data model
+   already supports them):
+   - Progress chart per player: players are keyed by name across multiple
+     saved measurements, so a history view can group by name and plot
+     scores.ovr / scores.<cat> over time.
+   - Head-to-head comparison: reuse playerCardHTML() + drawRadarChart()
+     side by side for two player objects.
+   - PDF / Excel export: players[] is plain JSON, ready to feed into a
+     future export routine.
+   - Weight configuration page: persist an override object in
+     localStorage (e.g. "fsas_config_override") and deep-merge it into
+     CONFIG.categories[*].weights at load time.
+   ========================================================================= */
+
+const STORAGE_KEY = 'fsas_players_v1';
+
+const STAT_COLORS = {
+  pac: '#4ade80',
+  sho: '#f97066',
+  pas: '#60a5fa',
+  dri: '#c084fc',
+  def: '#2dd4bf',
+  phy: '#fbbf24'
+};
+
+// General rubric used by every subjective 0-100 "poin" sub-test, shown once
+// on the guide page and referenced by each field's specific criteria.
+const GENERAL_RUBRIC = [
+  { range: '0 - 40', label: 'Kurang' },
+  { range: '41 - 60', label: 'Cukup' },
+  { range: '61 - 75', label: 'Baik' },
+  { range: '76 - 90', label: 'Sangat Baik' },
+  { range: '91 - 100', label: 'Elite' }
+];
+
+const CONFIG = {
+  categoryOrder: ['pac', 'sho', 'pas', 'dri', 'def', 'phy'],
+  categories: {
+    pac: {
+      label: 'PAC', title: 'Pace', type: 'time',
+      weights: { sprint10: 0.20, sprint30: 0.40, agility: 0.20, zigzag: 0.20 },
+      fields: [
+        { key: 'sprint10', label: 'Sprint 10 Meter', unit: 'detik', min: 1.0, max: 3.5, step: 0.01, best: 1.55, worst: 2.20,
+          guide: {
+            equipment: 'Meteran/pita ukur, 2 cone/marker (start & finish), stopwatch atau timing gate elektronik.',
+            procedure: [
+              'Pasang 2 marker berjarak tepat 10 meter pada lintasan lurus dan rata.',
+              'Pemain berdiri di belakang garis start dengan posisi siap (kaki depan-belakang, condong ke depan).',
+              'Aba-aba "Siap... Ya!" — stopwatch mulai saat kaki pertama pemain bergerak melewati garis start.',
+              'Pemain sprint secepat mungkin menuju garis finish; stopwatch berhenti saat dada pemain melewati garis finish.',
+              'Lakukan 2-3 kali percobaan dengan istirahat cukup (2-3 menit), catat waktu tercepat sebagai hasil akhir.'
+            ]
+          } },
+        { key: 'sprint30', label: 'Sprint 30 Meter', unit: 'detik', min: 3.0, max: 7.0, step: 0.01, best: 3.75, worst: 5.20,
+          guide: {
+            equipment: 'Meteran/pita ukur, 2 cone/marker (start & finish), stopwatch atau timing gate elektronik.',
+            procedure: [
+              'Pasang 2 marker berjarak tepat 30 meter pada lintasan lurus dan rata.',
+              'Pemain start dari posisi berdiri di belakang garis start (standing start), tanpa lari ancang-ancang.',
+              'Aba-aba "Siap... Ya!" — stopwatch mulai saat kaki pertama pemain bergerak melewati garis start.',
+              'Pemain sprint secepat mungkin menuju garis finish dengan usaha maksimal sepanjang lintasan.',
+              'Lakukan 2 kali percobaan dengan istirahat 3-4 menit, catat waktu tercepat.'
+            ]
+          } },
+        { key: 'agility', label: 'Agility Test', unit: 'detik', min: 10, max: 25, step: 0.01, best: 14.0, worst: 20.0,
+          guide: {
+            equipment: '8 cone (4 di sudut lintasan 10m x 5m, 4 cone slalom di tengah dengan jarak sama), stopwatch. (Protokol mengikuti Illinois Agility Test.)',
+            procedure: [
+              'Susun 4 cone membentuk persegi panjang 10m x 5m, dan 4 cone slalom berjajar di tengah lintasan.',
+              'Pemain memulai dalam posisi berbaring/tengkurap di titik start (atau berdiri jika permukaan tidak memungkinkan), kepala mengarah ke arah lari.',
+              'Aba-aba mulai — pemain bangun secepatnya lalu lari ke ujung lintasan (10m), berbalik, dan lari kembali ke tengah.',
+              'Pemain melakukan slalom bolak-balik melewati ke-4 cone tengah, lalu sprint ke sisi lintasan yang berlawanan dan kembali melewati garis finish.',
+              'Catat total waktu tempuh dari aba-aba mulai hingga pemain melewati garis finish.'
+            ]
+          } },
+        { key: 'zigzag', label: 'Zigzag Run', unit: 'detik', min: 6, max: 16, step: 0.01, best: 8.0, worst: 12.0,
+          guide: {
+            equipment: '4-5 cone, meteran, stopwatch.',
+            procedure: [
+              'Susun 4-5 cone berbentuk zigzag dengan jarak antar cone 2-3 meter (total lintasan sekitar 8-10 meter).',
+              'Pemain start dari cone pertama dalam posisi siap, tanpa bola.',
+              'Aba-aba mulai — pemain berlari secepat mungkin mengikuti pola zigzag melewati seluruh cone tanpa menyentuh/menjatuhkannya.',
+              'Stopwatch berhenti saat pemain melewati cone terakhir.',
+              'Lakukan 2 kali percobaan, ambil waktu tercepat.'
+            ]
+          } }
+      ]
+    },
+    sho: {
+      label: 'SHO', title: 'Shooting', type: 'score',
+      weights: { accuracy: 0.40, power: 0.20, finishing: 0.30, longshot: 0.10 },
+      fields: [
+        { key: 'accuracy', label: 'Akurasi Shooting', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Gawang/target dengan 6 zona sasaran (kotak kecil di sudut & sisi gawang), 10 bola.',
+            procedure: [
+              'Tempatkan bola pada titik tendangan 16-18 meter dari gawang.',
+              'Bagi gawang menjadi 6 zona sasaran menggunakan cone/tali/marker di sudut-sudutnya.',
+              'Pemain melakukan 10 kali tendangan ke zona sasaran yang ditentukan secara acak atau bergantian.',
+              'Hitung jumlah tendangan yang tepat mengenai zona sasaran.'
+            ],
+            scoring: 'Skor = (jumlah tendangan tepat sasaran ÷ 10) × 100. Contoh: 7 dari 10 tepat sasaran = 70 poin. Sesuaikan naik/turun berdasarkan kualitas teknik tendangan (perkenaan kaki, keseimbangan tubuh saat menendang).'
+          } },
+        { key: 'power', label: 'Power Shot', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Speed gun/radar kecepatan bola (jika tersedia), atau penilaian visual pelatih; gawang/dinding target.',
+            procedure: [
+              'Pemain melakukan 5 kali tendangan penuh (full power) dari jarak 16-20 meter ke arah gawang/target.',
+              'Ukur kecepatan bola menggunakan speed gun, atau nilai power secara visual berdasarkan kecepatan laju & suara perkenaan bola.',
+              'Ambil rata-rata dari 5 percobaan.'
+            ],
+            scoring: 'Jika memakai speed gun: <50 km/jam ≈ 0-40 poin, 50-70 km/jam ≈ 41-65 poin, 70-90 km/jam ≈ 66-85 poin, >90 km/jam ≈ 86-100 poin. Jika penilaian visual, gunakan Skala Penilaian Umum di bawah.'
+          } },
+        { key: 'finishing', label: 'Finishing', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, gawang, kiper (opsional), pengumpan (pelatih/rekan).',
+            procedure: [
+              'Siapkan 10 skenario umpan ke pemain di sekitar kotak penalti (umpan datar, silang, dan terobosan).',
+              'Pemain harus menyelesaikan peluang menjadi tendangan ke gawang secara cepat dan tepat (idealnya 1-2 sentuhan).',
+              'Catat jumlah percobaan yang berhasil menjadi gol atau tendangan akurat mengarah ke gawang.'
+            ],
+            scoring: 'Skor = (jumlah penyelesaian akurat/gol ÷ 10) × 100, disesuaikan dengan kecepatan pengambilan keputusan dan kualitas teknik penyelesaian.'
+          } },
+        { key: 'longshot', label: 'Long Shot', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, gawang, marker jarak 20-25 meter.',
+            procedure: [
+              'Pemain menendang bola dari jarak 20-25 meter ke arah gawang sebanyak 5-8 kali.',
+              'Nilai kombinasi akurasi (tendangan mengarah ke gawang/on target) dan power tendangan.'
+            ],
+            scoring: 'Skor = (jumlah tendangan akurat & bertenaga ÷ total percobaan) × 100. Beri bobot lebih pada ketepatan sasaran dibanding power semata.'
+          } }
+      ]
+    },
+    pas: {
+      label: 'PAS', title: 'Passing', type: 'score',
+      weights: { shortPass: 0.25, longPass: 0.25, cross: 0.25, throughPass: 0.25 },
+      fields: [
+        { key: 'shortPass', label: 'Short Pass', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, target/pasangan pemain berjarak kurang dari 15 meter, cone sebagai marker area sasaran.',
+            procedure: [
+              'Pemain melakukan umpan pendek (jarak <15m) ke target/rekan sebanyak 10 kali, bergantian kaki dominan dan non-dominan.',
+              'Target berupa cone/area kecil atau pemain lain yang harus menerima bola tanpa bergerak jauh.',
+              'Catat jumlah umpan yang akurat dan mudah diterima (first-touch friendly).'
+            ],
+            scoring: 'Skor = (jumlah umpan akurat ÷ 10) × 100, pertimbangkan juga kecepatan & konsistensi teknik.'
+          } },
+        { key: 'longPass', label: 'Long Pass', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, area target berjarak lebih dari 30 meter, cone sebagai penanda zona target.',
+            procedure: [
+              'Pemain melakukan umpan lambung/panjang sejauh lebih dari 30 meter ke zona target yang ditandai cone, sebanyak 8-10 kali.',
+              'Nilai ketepatan jatuhnya bola ke dalam zona target dan kualitas lintasan bola.'
+            ],
+            scoring: 'Skor = (jumlah umpan masuk zona target ÷ total percobaan) × 100.'
+          } },
+        { key: 'cross', label: 'Cross', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, area sayap lapangan, target di kotak penalti (tiang dekat, tiang jauh, titik penalti).',
+            procedure: [
+              'Pemain melakukan umpan silang (crossing) dari sisi lapangan menuju kotak penalti sebanyak 8-10 kali.',
+              'Tandai 2-3 zona target di kotak penalti (tiang dekat, tiang jauh, titik penalti).',
+              'Catat jumlah crossing yang akurat mencapai zona target dengan ketinggian & kecepatan yang sesuai untuk penyelesaian akhir.'
+            ],
+            scoring: 'Skor = (jumlah crossing akurat ÷ total percobaan) × 100.'
+          } },
+        { key: 'throughPass', label: 'Through Pass', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, pemain penerima yang bergerak, cone sebagai simulasi lini pertahanan lawan.',
+            procedure: [
+              'Simulasikan lini pertahanan lawan menggunakan cone, dengan pemain penerima bersiap melakukan lari terobosan di belakang lini tersebut.',
+              'Pemain melakukan umpan terobosan yang memutus lini pertahanan menuju ruang kosong sebanyak 8-10 kali.',
+              'Nilai ketepatan timing umpan dan akurasi arah/kekuatan bola agar dapat dikontrol penerima tanpa mengurangi kecepatan larinya.'
+            ],
+            scoring: 'Skor = (jumlah umpan terobosan berhasil ÷ total percobaan) × 100, dengan penilaian tambahan pada ketepatan waktu (timing) umpan.'
+          } }
+      ]
+    },
+    dri: {
+      label: 'DRI', title: 'Dribbling', type: 'score',
+      weights: { coneDribble: 0.25, ballControl: 0.25, firstTouch: 0.25, skillMove: 0.25 },
+      fields: [
+        { key: 'coneDribble', label: 'Cone Dribble', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: '6 cone berjarak 1.5 meter, bola, stopwatch.',
+            procedure: [
+              'Susun 6 cone dalam garis lurus dengan jarak antar cone 1.5 meter.',
+              'Pemain menggiring bola melewati seluruh cone secepat dan serapi mungkin (zig-zag), lalu kembali ke titik awal.',
+              'Catat waktu tempuh dan jumlah kesalahan (bola keluar jalur/menyentuh cone).'
+            ],
+            scoring: 'Kombinasi kecepatan & kontrol: cepat tanpa kesalahan ≈ 86-100, sedang dengan sedikit kesalahan ≈ 61-85, banyak kesalahan/lambat ≈ 0-60.'
+          } },
+        { key: 'ballControl', label: 'Ball Control', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, rekan/pelatih pengumpan dari berbagai sudut dan ketinggian.',
+            procedure: [
+              'Pengumpan memberikan 10 umpan bervariasi (bawah, tinggi, dari sisi kanan/kiri) kepada pemain.',
+              'Pemain harus menerima dan mengontrol bola secepat mungkin agar tetap dalam jangkauan kontrol (idealnya 1-2 sentuhan).',
+              'Nilai kualitas kontrol: bola tetap dekat dengan kaki, tidak memantul jauh, dan siap untuk aksi berikutnya.'
+            ],
+            scoring: 'Skor = (jumlah kontrol berkualitas baik ÷ 10) × 100.'
+          } },
+        { key: 'firstTouch', label: 'First Touch', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, pengumpan, area terbuka untuk mengarahkan bola.',
+            procedure: [
+              'Pengumpan memberikan umpan cepat/tinggi ke pemain sebanyak 8-10 kali dari berbagai arah.',
+              'Pemain harus mengarahkan sentuhan pertama ke ruang terbuka yang telah ditentukan sebelumnya sambil menjaga penguasaan bola.',
+              'Nilai ketepatan arah sentuhan pertama dan kesiapan bola untuk aksi lanjutan (dribble/passing/shooting).'
+            ],
+            scoring: 'Skor = (jumlah sentuhan pertama yang tepat & terkontrol ÷ total percobaan) × 100.'
+          } },
+        { key: 'skillMove', label: 'Skill Move', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, satu pemain lawan (defender), area kecil sekitar 5x5 meter.',
+            procedure: [
+              'Siapkan situasi 1 lawan 1 dalam area terbatas (sekitar 5x5 meter).',
+              'Pemain mencoba melewati defender menggunakan gerak tipu/skill move (step over, roulette, nutmeg, dll) sebanyak 5-8 kali percobaan.',
+              'Catat jumlah keberhasilan melewati lawan dengan kontrol bola tetap terjaga.'
+            ],
+            scoring: 'Skor = (jumlah keberhasilan melewati lawan ÷ total percobaan) × 100, dengan bobot tambahan untuk variasi & kreativitas gerakan.'
+          } }
+      ]
+    },
+    def: {
+      label: 'DEF', title: 'Defending', type: 'score',
+      weights: { standingTackle: 0.25, slidingTackle: 0.25, interception: 0.25, heading: 0.25 },
+      fields: [
+        { key: 'standingTackle', label: 'Standing Tackle', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, satu pemain lawan (penyerang) untuk simulasi 1v1.',
+            procedure: [
+              'Simulasikan situasi 1v1 di mana lawan menguasai bola dan pemain harus melakukan tekel berdiri untuk merebutnya.',
+              'Lakukan 8-10 percobaan dari berbagai sudut pendekatan.',
+              'Nilai keberhasilan merebut bola secara bersih tanpa pelanggaran (menyentuh bola sebelum lawan).'
+            ],
+            scoring: 'Skor = (jumlah tekel bersih & berhasil ÷ total percobaan) × 100.'
+          } },
+        { key: 'slidingTackle', label: 'Sliding Tackle', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, satu pemain lawan, area rumput/permukaan aman untuk meluncur.',
+            procedure: [
+              'Simulasikan situasi lawan menguasai bola dengan jarak yang membutuhkan tekel meluncur (sliding tackle).',
+              'Lakukan 6-8 percobaan; nilai ketepatan waktu (timing), teknik meluncur yang aman, dan keberhasilan menghalau/merebut bola.'
+            ],
+            scoring: 'Skor = (jumlah tekel meluncur berhasil & aman ÷ total percobaan) × 100.'
+          } },
+        { key: 'interception', label: 'Interception', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, 2 pemain penyerang untuk simulasi umpan, 1 pemain bertahan (yang dites).',
+            procedure: [
+              'Dua pemain saling mengumpan sementara pemain yang dites berusaha membaca dan memotong jalur umpan.',
+              'Lakukan 8-10 percobaan dengan variasi jarak dan kecepatan umpan.',
+              'Nilai kemampuan membaca permainan dan ketepatan waktu memotong bola.'
+            ],
+            scoring: 'Skor = (jumlah intersep berhasil ÷ total percobaan) × 100.'
+          } },
+        { key: 'heading', label: 'Heading', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Bola, pengumpan lambung (lemparan/tendangan), target area (zona tertentu atau gawang).',
+            procedure: [
+              'Pengumpan memberikan umpan lambung ke arah pemain sebanyak 8-10 kali.',
+              'Pemain menyundul bola dengan tujuan tertentu (mengarah ke target/gawang untuk klirens atau mencetak gol).',
+              'Nilai akurasi arah sundulan dan power/kekuatan sundulan.'
+            ],
+            scoring: 'Skor = (jumlah sundulan akurat & bertenaga ÷ total percobaan) × 100.'
+          } }
+      ]
+    },
+    phy: {
+      label: 'PHY', title: 'Physical', type: 'score',
+      weights: { strength: 0.25, balance: 0.25, stamina: 0.25, jump: 0.25 },
+      fields: [
+        { key: 'strength', label: 'Strength', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Tidak wajib alat khusus; dapat memakai tes body contact 1v1 (shielding bola), atau alat seperti squat test/leg press jika tersedia.',
+            procedure: [
+              'Metode sederhana: tes shielding bola — pemain menguasai bola sambil didorong/dihalangi lawan selama 10 detik, nilai kemampuan mempertahankan penguasaan bola.',
+              'Metode alternatif (jika ada alat): lakukan tes kekuatan standar (squat/leg press) dan bandingkan relatif terhadap berat badan.',
+              'Ulangi 3 kali percobaan dan ambil rata-rata penilaian.'
+            ],
+            scoring: 'Gunakan Skala Penilaian Umum di bawah berdasarkan kemampuan pemain mempertahankan posisi/bola saat kontak fisik.'
+          } },
+        { key: 'balance', label: 'Balance', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Area datar, cone (opsional untuk Y-Balance Test), bola.',
+            procedure: [
+              'Metode sederhana: pemain berdiri dengan satu kaki sambil mengontrol bola atau menerima dorongan ringan dari pelatih, tahan selama 10-15 detik.',
+              'Metode alternatif: lakukan Y-Balance Test dengan menjangkau 3 arah menggunakan satu kaki tumpu.',
+              'Nilai kestabilan tubuh dan kemampuan mempertahankan keseimbangan tanpa kehilangan kontrol.'
+            ],
+            scoring: 'Gunakan Skala Penilaian Umum di bawah.'
+          } },
+        { key: 'stamina', label: 'Stamina', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Lapangan/lintasan, cone sebagai marker jarak, stopwatch, atau audio Beep Test/Yo-Yo Test jika tersedia.',
+            procedure: [
+              'Metode standar: lakukan Bleep Test (Multi-Stage Fitness Test) atau Yo-Yo Intermittent Recovery Test sesuai protokol resmi hingga pemain tidak sanggup mengikuti irama.',
+              'Catat level/shuttle terakhir yang berhasil diselesaikan.',
+              'Jika alat/audio tidak tersedia, gunakan tes lari 12 menit (Cooper Test) dan ukur total jarak tempuh.'
+            ],
+            scoring: 'Konversikan hasil level Bleep Test / jarak Cooper Test ke skala 0-100 berdasarkan norma usia & level pemain — semakin tinggi level/jarak, semakin tinggi skor.'
+          } },
+        { key: 'jump', label: 'Jump', unit: 'poin', min: 0, max: 100, step: 1,
+          guide: {
+            equipment: 'Dinding/vertec untuk vertical jump, atau meteran untuk standing broad jump.',
+            procedure: [
+              'Metode Vertical Jump: pemain berdiri menyamping dinding, raih setinggi mungkin (tanda 1), lalu melompat setinggi mungkin dan menyentuh dinding (tanda 2). Selisih tinggi = hasil lompatan.',
+              'Metode alternatif Standing Broad Jump: pemain melompat sejauh mungkin dari posisi diam, ukur jarak dari titik start ke titik pendaratan terdekat.',
+              'Lakukan 3 kali percobaan, ambil hasil terbaik.'
+            ],
+            scoring: 'Sebagai acuan umum (Vertical Jump): 60cm ke atas ≈ 90-100 poin, 40-50cm ≈ 60-75 poin, di bawah 30cm ≈ kurang dari 40 poin.'
+          } }
+      ]
+    }
+  }
+};
+
+/* ---------------------------- state ---------------------------- */
+let players = loadPlayers();
+let draftPlayer = null;     // { name, age, date }
+let editingId = null;       // id of player being edited, or null for a new one
+let currentInputs = {};     // { catKey: { fieldKey: rawStringValue } }
+let currentScores = {};     // { catKey: number }
+let pendingResult = null;   // fully computed player object waiting to be saved
+let currentDetailId = null; // id of player shown in detail view
+
+/* ---------------------------- storage ---------------------------- */
+function loadPlayers() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const data = raw ? JSON.parse(raw) : [];
+    return Array.isArray(data) ? data : [];
+  } catch (e) {
+    return [];
+  }
+}
+function savePlayers(list) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+}
+
+/* ---------------------------- scoring engine ---------------------------- */
+function timeToScore(rawValue, best, worst) {
+  const v = parseFloat(rawValue);
+  if (isNaN(v)) return 0;
+  if (v <= best) return 100;
+  if (v >= worst) return 0;
+  return Math.round(((worst - v) / (worst - best)) * 100);
+}
+function rawToScore(rawValue) {
+  const v = parseFloat(rawValue);
+  if (isNaN(v)) return 0;
+  return Math.max(0, Math.min(100, Math.round(v)));
+}
+function computeCategory(catKey, rawInputs) {
+  const cat = CONFIG.categories[catKey];
+  const inputs = rawInputs || {};
+  let total = 0;
+  cat.fields.forEach(f => {
+    const raw = inputs[f.key];
+    const score = cat.type === 'time' ? timeToScore(raw, f.best, f.worst) : rawToScore(raw);
+    total += score * cat.weights[f.key];
+  });
+  return Math.round(total);
+}
+function computeOVR(scores) {
+  const vals = CONFIG.categoryOrder.map(k => scores[k] || 0);
+  return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+}
+function getTier(ovr) {
+  if (ovr >= 85) return { name: 'Elite', class: 'tier-elite', hex: '#f2d675' };
+  if (ovr >= 75) return { name: 'Gold', class: 'tier-gold', hex: '#d4af37' };
+  if (ovr >= 65) return { name: 'Silver', class: 'tier-silver', hex: '#c7cdd9' };
+  return { name: 'Bronze', class: 'tier-bronze', hex: '#cd7f32' };
+}
+
+/* ---------------------------- helpers ---------------------------- */
+function uid() { return 'p_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8); }
+function escapeHtml(str) { const div = document.createElement('div'); div.textContent = String(str); return div.innerHTML; }
+function getInitials(name) { return name.trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase(); }
+function formatDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function $(id) { return document.getElementById(id); }
+
+/* ---------------------------- navigation ---------------------------- */
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = $(id);
+  if (target) target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function resetDraftState() {
+  draftPlayer = null;
+  editingId = null;
+  currentInputs = {};
+  currentScores = {};
+  pendingResult = null;
+}
+
+/* ---------------------------- dashboard rendering ---------------------------- */
+function renderDashboard() {
+  renderStats();
+  renderPlayerList();
+}
+
+function renderStats() {
+  const statsGrid = $('statsGrid');
+  if (players.length === 0) { statsGrid.innerHTML = ''; return; }
+  const count = players.length;
+  const avgOvr = Math.round(players.reduce((s, p) => s + p.scores.ovr, 0) / count);
+  const tops = {};
+  CONFIG.categoryOrder.forEach(k => {
+    let best = players[0];
+    players.forEach(p => { if (p.scores[k] > best.scores[k]) best = p; });
+    tops[k] = best;
+  });
+  const cards = [
+    `<div class="stat-card"><div class="stat-label">Jumlah Pemain</div><div class="stat-value">${count}</div></div>`,
+    `<div class="stat-card accent"><div class="stat-label">Rata-rata OVR</div><div class="stat-value">${avgOvr}</div></div>`,
+    ...CONFIG.categoryOrder.map(k => `
+      <div class="stat-card">
+        <div class="stat-label">${CONFIG.categories[k].title} Tertinggi</div>
+        <div class="stat-value" style="color:${STAT_COLORS[k]}">${tops[k].scores[k]}</div>
+        <div class="stat-sub">${escapeHtml(tops[k].name)}</div>
+      </div>`)
+  ];
+  statsGrid.innerHTML = cards.join('');
+}
+
+function getFilteredSortedPlayers() {
+  const term = ($('searchInput').value || '').trim().toLowerCase();
+  let list = players.filter(p => p.name.toLowerCase().includes(term));
+  switch ($('sortSelect').value) {
+    case 'ovr-desc': list.sort((a, b) => b.scores.ovr - a.scores.ovr); break;
+    case 'ovr-asc': list.sort((a, b) => a.scores.ovr - b.scores.ovr); break;
+    case 'newest': list.sort((a, b) => new Date(b.date) - new Date(a.date)); break;
+    case 'oldest': list.sort((a, b) => new Date(a.date) - new Date(b.date)); break;
+  }
+  return list;
+}
+
+function playerRowHTML(p) {
+  const tier = getTier(p.scores.ovr);
+  return `
+  <div class="player-row glass" data-id="${p.id}">
+    <div class="player-avatar ${tier.class}">${getInitials(p.name)}</div>
+    <div class="player-info">
+      <h3>${escapeHtml(p.name)}</h3>
+      <p>${p.age} tahun &middot; ${formatDate(p.date)}</p>
+    </div>
+    <div class="player-mini-stats">
+      ${CONFIG.categoryOrder.map(k => `<span>${CONFIG.categories[k].label}<b>${p.scores[k]}</b></span>`).join('')}
+    </div>
+    <div class="player-ovr ${tier.class}">
+      <span class="ovr-value">${p.scores.ovr}</span>
+      <span class="ovr-label">${tier.name}</span>
+    </div>
+    <div class="player-actions">
+      <button data-action="view">Lihat</button>
+      <button data-action="edit">Edit</button>
+      <button data-action="delete">Hapus</button>
+    </div>
+  </div>`;
+}
+
+function renderPlayerList() {
+  const container = $('playerListContainer');
+  const emptyState = $('emptyState');
+  if (players.length === 0) {
+    container.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  emptyState.classList.add('hidden');
+  const list = getFilteredSortedPlayers();
+  if (list.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:36px 0;">Tidak ditemukan pemain dengan nama tersebut.</p>';
+    return;
+  }
+  container.innerHTML = list.map(playerRowHTML).join('');
+}
+
+/* ---------------------------- player card + radar ---------------------------- */
+function playerCardHTML(player) {
+  const tier = getTier(player.scores.ovr);
+  return `
+  <div class="player-card ${tier.class}">
+    <div class="card-shine"></div>
+    <div class="card-top">
+      <div class="card-ovr">${player.scores.ovr}</div>
+      <div class="card-tier">${tier.name}</div>
+    </div>
+    <div class="card-name">${escapeHtml(player.name)}</div>
+    <div class="card-sub">${player.age} Tahun &middot; ${formatDate(player.date)}</div>
+    <canvas class="card-radar" width="260" height="220"></canvas>
+    <div class="card-stats">
+      ${CONFIG.categoryOrder.map(k => `<div><span>${CONFIG.categories[k].label}</span><b>${player.scores[k]}</b></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function drawRadarChart(canvas, scores) {
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const cx = w / 2, cy = h / 2 + 4, radius = Math.min(w, h) / 2 - 34;
+  const keys = CONFIG.categoryOrder;
+  const angleStep = (Math.PI * 2) / keys.length;
+
+  // grid rings
+  ctx.strokeStyle = 'rgba(245,247,251,.14)';
+  ctx.lineWidth = 1;
+  for (let ring = 1; ring <= 4; ring++) {
+    const r = radius * (ring / 4);
+    ctx.beginPath();
+    for (let i = 0; i <= keys.length; i++) {
+      const angle = -Math.PI / 2 + i * angleStep;
+      const x = cx + r * Math.cos(angle), y = cy + r * Math.sin(angle);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // axes + labels
+  keys.forEach((k, i) => {
+    const angle = -Math.PI / 2 + i * angleStep;
+    const x = cx + radius * Math.cos(angle), y = cy + radius * Math.sin(angle);
+    ctx.strokeStyle = 'rgba(245,247,251,.12)';
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+    const lx = cx + (radius + 18) * Math.cos(angle), ly = cy + (radius + 18) * Math.sin(angle);
+    ctx.fillStyle = STAT_COLORS[k];
+    ctx.font = '700 12px Rajdhani, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(CONFIG.categories[k].label, lx, ly);
+  });
+
+  // data polygon
+  ctx.beginPath();
+  keys.forEach((k, i) => {
+    const val = (scores[k] || 0) / 100;
+    const angle = -Math.PI / 2 + i * angleStep;
+    const x = cx + radius * val * Math.cos(angle), y = cy + radius * val * Math.sin(angle);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(212,175,55,.28)';
+  ctx.fill();
+  ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 2; ctx.stroke();
+
+  keys.forEach((k, i) => {
+    const val = (scores[k] || 0) / 100;
+    const angle = -Math.PI / 2 + i * angleStep;
+    const x = cx + radius * val * Math.cos(angle), y = cy + radius * val * Math.sin(angle);
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#f2d675'; ctx.fill();
+  });
+}
+
+function renderBreakdown(container, player) {
+  container.innerHTML = `<h3>Rincian Skor</h3>` +
+    CONFIG.categoryOrder.map(k => {
+      const cat = CONFIG.categories[k];
+      const val = player.scores[k];
+      return `
+      <div class="breakdown-row">
+        <span>${cat.title} (${cat.label})</span>
+        <div class="bd-bar"><span style="width:${val}%;background:${STAT_COLORS[k]}"></span></div>
+        <span class="bd-val">${val}</span>
+      </div>`;
+    }).join('') +
+    `<p style="color:var(--text-dim);font-size:12.5px;margin-top:14px;">OVR ${player.scores.ovr} dihitung dari rata-rata PAC, SHO, PAS, DRI, DEF, dan PHY.</p>`;
+}
+
+/* ---------------------------- assessment form rendering ---------------------------- */
+function renderCategoryCardHTML(catKey) {
+  const cat = CONFIG.categories[catKey];
+  const inputs = currentInputs[catKey] || {};
+  return `
+  <div class="category-card glass" style="--cat-color:${STAT_COLORS[catKey]}">
+    <div class="category-card-head">
+      <div><h3>${cat.label}</h3><span>${cat.title}</span></div>
+      <div class="category-card-score" id="catscore-${catKey}">&ndash;</div>
+    </div>
+    ${cat.fields.map(f => `
+      <div class="field-row" id="row-${catKey}-${f.key}">
+        <label for="field-${catKey}-${f.key}">
+          <span>${f.label}
+            <button type="button" class="info-btn" data-info="${catKey}.${f.key}" aria-label="Lihat instruksi tes ${f.label}">i</button>
+          </span>
+          <span>${f.unit}</span>
+        </label>
+        <input type="number" inputmode="decimal" step="${f.step}" min="${f.min}" max="${f.max}"
+               id="field-${catKey}-${f.key}" data-cat="${catKey}" data-field="${f.key}"
+               value="${inputs[f.key] !== undefined ? inputs[f.key] : ''}" placeholder="0" />
+        <span class="field-error" id="err-${catKey}-${f.key}"></span>
+      </div>`).join('')}
+  </div>`;
+}
+
+function renderAssessment() {
+  $('assessmentPlayerName').textContent = `Pengujian: ${draftPlayer.name} (${draftPlayer.age} th)`;
+  $('categoryGrid').innerHTML = CONFIG.categoryOrder.map(renderCategoryCardHTML).join('');
+  $('liveScores').innerHTML = CONFIG.categoryOrder.map(k => `
+    <div class="live-chip" id="livechip-${k}">
+      <span class="dot" style="background:${STAT_COLORS[k]}"></span>${CONFIG.categories[k].label}: <b id="livechipval-${k}">&ndash;</b>
+    </div>`).join('') + `
+    <div class="live-chip" id="livechip-ovr" style="border-color:rgba(212,175,55,.5)">
+      <span class="dot" style="background:#d4af37"></span>OVR: <b id="livechipval-ovr">&ndash;</b>
+    </div>`;
+  CONFIG.categoryOrder.forEach(updateLiveScoreForCategory);
+}
+
+function updateLiveScoreForCategory(catKey) {
+  const cat = CONFIG.categories[catKey];
+  const inputs = currentInputs[catKey] || {};
+  const allFilled = cat.fields.every(f => inputs[f.key] !== undefined && inputs[f.key] !== '' && !isNaN(parseFloat(inputs[f.key])));
+  const scoreEl = $(`catscore-${catKey}`);
+  const chipEl = $(`livechipval-${catKey}`);
+  if (allFilled) {
+    const score = computeCategory(catKey, inputs);
+    currentScores[catKey] = score;
+    if (scoreEl) scoreEl.textContent = score;
+    if (chipEl) chipEl.textContent = score;
+  } else {
+    currentScores[catKey] = null;
+    if (scoreEl) scoreEl.textContent = '\u2013';
+    if (chipEl) chipEl.textContent = '\u2013';
+  }
+  updateLiveOVR();
+}
+function updateLiveOVR() {
+  const el = $('livechipval-ovr');
+  if (!el) return;
+  const allSet = CONFIG.categoryOrder.every(k => currentScores[k] !== null && currentScores[k] !== undefined);
+  el.textContent = allSet ? computeOVR(currentScores) : '\u2013';
+}
+
+/* ---------------------------- validation ---------------------------- */
+function clearFieldError(row, err) {
+  if (row) row.classList.remove('error');
+  if (err) err.textContent = '';
+}
+function validateNewForm() {
+  let valid = true;
+  const name = $('inputName').value.trim();
+  const age = $('inputAge').value;
+  const nameGroup = $('inputName').closest('.form-group');
+  const ageGroup = $('inputAge').closest('.form-group');
+  clearFieldError(nameGroup, $('errName'));
+  clearFieldError(ageGroup, $('errAge'));
+
+  if (!name) {
+    valid = false; nameGroup.classList.add('error'); $('errName').textContent = 'Nama tidak boleh kosong.';
+  }
+  const ageNum = parseInt(age, 10);
+  if (!age || isNaN(ageNum) || ageNum < 5 || ageNum > 60) {
+    valid = false; ageGroup.classList.add('error'); $('errAge').textContent = 'Umur harus berupa angka antara 5-60.';
+  }
+  return valid ? { name, age: ageNum } : null;
+}
+function validateAssessment() {
+  let valid = true;
+  let firstInvalid = null;
+  CONFIG.categoryOrder.forEach(catKey => {
+    const cat = CONFIG.categories[catKey];
+    cat.fields.forEach(f => {
+      const val = (currentInputs[catKey] || {})[f.key];
+      const rowEl = $(`row-${catKey}-${f.key}`);
+      const errEl = $(`err-${catKey}-${f.key}`);
+      let msg = '';
+      if (val === undefined || val === '') {
+        msg = 'Wajib diisi';
+      } else if (isNaN(parseFloat(val))) {
+        msg = 'Harus berupa angka';
+      } else {
+        const num = parseFloat(val);
+        if (num < f.min || num > f.max) msg = `Rentang ${f.min}-${f.max}`;
+      }
+      if (msg) {
+        valid = false;
+        if (rowEl) rowEl.classList.add('error');
+        if (errEl) errEl.textContent = msg;
+        if (!firstInvalid) firstInvalid = rowEl;
+      } else {
+        clearFieldError(rowEl, errEl);
+      }
+    });
+  });
+  if (!valid && firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  return valid;
+}
+
+/* ---------------------------- toast + confirm modal ---------------------------- */
+function showToast(message, type = 'success') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.textContent = message;
+  $('toastContainer').appendChild(el);
+  setTimeout(() => {
+    el.classList.add('fade-out');
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+function showConfirm(message, onConfirm) {
+  const modal = $('confirmModal');
+  $('confirmMessage').textContent = message;
+  modal.classList.remove('hidden');
+  const okBtn = $('confirmOkBtn'), cancelBtn = $('confirmCancelBtn');
+  function cleanup() {
+    modal.classList.add('hidden');
+    okBtn.removeEventListener('click', onOk);
+    cancelBtn.removeEventListener('click', onCancel);
+  }
+  function onOk() { cleanup(); onConfirm(); }
+  function onCancel() { cleanup(); }
+  okBtn.addEventListener('click', onOk);
+  cancelBtn.addEventListener('click', onCancel);
+}
+
+/* ---------------------------- test instruction guides ---------------------------- */
+function generalRubricHTML() {
+  return `<table class="rubric-table">
+    <thead><tr><th>Rentang Poin</th><th>Predikat</th></tr></thead>
+    <tbody>
+      ${GENERAL_RUBRIC.map(r => `<tr><td>${r.range}</td><td>${r.label}</td></tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+function buildFieldGuideHTML(catKey, field) {
+  const cat = CONFIG.categories[catKey];
+  const g = field.guide || {};
+  let html = '';
+  if (g.equipment) html += `<p><b>Peralatan:</b> ${g.equipment}</p>`;
+  if (g.procedure && g.procedure.length) {
+    html += `<p><b>Prosedur:</b></p><ol class="guide-steps">${g.procedure.map(step => `<li>${step}</li>`).join('')}</ol>`;
+  }
+  if (cat.type === 'time') {
+    html += `<p><b>Standar Skor:</b> waktu ${field.best} detik = 100 poin (tercepat), ${field.worst} detik = 0 poin. Semakin cepat waktu tempuh, semakin tinggi skor (dihitung dengan interpolasi linear di antara kedua batas tersebut).</p>`;
+  } else if (g.scoring) {
+    html += `<p><b>Panduan Penilaian (0-100):</b> ${g.scoring}</p>`;
+    if (!/Skala Penilaian Umum/.test(g.scoring)) {
+      html += `<p style="color:var(--text-dim);font-size:12.5px;">Jika kondisi lapangan tidak memungkinkan pengukuran presisi di atas, gunakan Skala Penilaian Umum sebagai acuan cadangan.</p>${generalRubricHTML()}`;
+    } else {
+      html += generalRubricHTML();
+    }
+  }
+  return html;
+}
+function openInfoModal(title, bodyHtml) {
+  $('infoModalTitle').textContent = title;
+  $('infoModalBody').innerHTML = bodyHtml;
+  $('infoModal').classList.remove('hidden');
+}
+function closeInfoModal() {
+  $('infoModal').classList.add('hidden');
+}
+function showFieldInfo(catKey, fieldKey) {
+  const cat = CONFIG.categories[catKey];
+  const field = cat.fields.find(f => f.key === fieldKey);
+  if (!field) return;
+  openInfoModal(`${cat.label} \u2014 ${field.label}`, buildFieldGuideHTML(catKey, field));
+}
+function onCategoryGridClick(e) {
+  const btn = e.target.closest('.info-btn');
+  if (!btn) return;
+  const [catKey, fieldKey] = (btn.dataset.info || '').split('.');
+  if (catKey && fieldKey) showFieldInfo(catKey, fieldKey);
+}
+
+/* ---------------------------- full testing guide page ---------------------------- */
+function renderGuidePage() {
+  const sections = CONFIG.categoryOrder.map(catKey => {
+    const cat = CONFIG.categories[catKey];
+    const fieldsHtml = cat.fields.map(f => `
+      <details class="guide-field" open>
+        <summary style="color:${STAT_COLORS[catKey]}">${f.label} <span class="guide-field-unit">(${f.unit})</span></summary>
+        <div class="guide-field-body">${buildFieldGuideHTML(catKey, f)}</div>
+      </details>`).join('');
+    return `
+    <div class="guide-section glass" style="--cat-color:${STAT_COLORS[catKey]}">
+      <div class="guide-section-head">
+        <h2>${cat.label} <span>&mdash; ${cat.title}</span></h2>
+      </div>
+      ${fieldsHtml}
+    </div>`;
+  }).join('');
+  $('guideContent').innerHTML = `
+    <p class="form-sub" style="max-width:720px;">
+      Panduan lengkap ini berisi peralatan, prosedur pelaksanaan, dan cara menilai setiap sub-tes
+      dalam keenam kategori (PAC, SHO, PAS, DRI, DEF, PHY). Gunakan sebagai acuan agar penilaian
+      antar sesi dan antar pelatih tetap konsisten.
+    </p>
+    ${sections}`;
+}
+
+/* ---------------------------- CRUD flows ---------------------------- */
+function onNewMeasurement() {
+  resetDraftState();
+  $('inputName').value = '';
+  $('inputAge').value = '';
+  clearFieldError($('inputName').closest('.form-group'), $('errName'));
+  clearFieldError($('inputAge').closest('.form-group'), $('errAge'));
+  showView('view-new');
+}
+function onStartAssessment() {
+  const result = validateNewForm();
+  if (!result) return;
+  draftPlayer = { name: result.name, age: result.age, date: new Date().toISOString() };
+  currentInputs = {};
+  currentScores = {};
+  renderAssessment();
+  showView('view-assessment');
+}
+function onCategoryInput(e) {
+  const inp = e.target;
+  if (inp.tagName !== 'INPUT') return;
+  const cat = inp.dataset.cat, field = inp.dataset.field;
+  if (!cat || !field) return;
+  if (!currentInputs[cat]) currentInputs[cat] = {};
+  currentInputs[cat][field] = inp.value;
+  clearFieldError($(`row-${cat}-${field}`), $(`err-${cat}-${field}`));
+  updateLiveScoreForCategory(cat);
+}
+function onCalculate() {
+  if (!validateAssessment()) {
+    showToast('Periksa kembali input Anda.', 'error');
+    return;
+  }
+  CONFIG.categoryOrder.forEach(k => { currentScores[k] = computeCategory(k, currentInputs[k]); });
+  const ovr = computeOVR(currentScores);
+  pendingResult = {
+    id: editingId,
+    name: draftPlayer.name,
+    age: draftPlayer.age,
+    date: draftPlayer.date,
+    inputs: JSON.parse(JSON.stringify(currentInputs)),
+    scores: { ...currentScores, ovr }
+  };
+  renderResultView(pendingResult);
+  showView('view-result');
+}
+function renderResultView(player) {
+  const wrap = $('playerCardWrap');
+  wrap.innerHTML = playerCardHTML(player);
+  drawRadarChart(wrap.querySelector('.card-radar'), player.scores);
+  renderBreakdown($('resultDetails'), player);
+}
+function onSave() {
+  if (!pendingResult) return;
+  if (editingId) {
+    const idx = players.findIndex(p => p.id === editingId);
+    if (idx > -1) { pendingResult.id = editingId; players[idx] = pendingResult; }
+    else { pendingResult.id = uid(); players.push(pendingResult); }
+  } else {
+    pendingResult.id = uid();
+    players.push(pendingResult);
+  }
+  savePlayers(players);
+  showToast(editingId ? 'Data berhasil diperbarui.' : 'Data berhasil disimpan.', 'success');
+  resetDraftState();
+  renderDashboard();
+  showView('view-dashboard');
+}
+
+function openDetail(id) {
+  const player = players.find(p => p.id === id);
+  if (!player) return;
+  currentDetailId = id;
+  const wrap = $('detailCardWrap');
+  wrap.innerHTML = playerCardHTML(player);
+  drawRadarChart(wrap.querySelector('.card-radar'), player.scores);
+  renderBreakdown($('detailDetails'), player);
+  showView('view-detail');
+}
+function startEdit(id) {
+  const player = players.find(p => p.id === id);
+  if (!player) return;
+  editingId = id;
+  draftPlayer = { name: player.name, age: player.age, date: player.date };
+  currentInputs = JSON.parse(JSON.stringify(player.inputs));
+  currentScores = { ...player.scores };
+  renderAssessment();
+  showView('view-assessment');
+}
+function confirmDelete(id) {
+  const player = players.find(p => p.id === id);
+  if (!player) return;
+  showConfirm(`Hapus data pengukuran ${player.name}? Tindakan ini tidak dapat dibatalkan.`, () => {
+    players = players.filter(p => p.id !== id);
+    savePlayers(players);
+    showToast('Data berhasil dihapus.', 'success');
+    renderDashboard();
+    showView('view-dashboard');
+  });
+}
+function onPlayerListClick(e) {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const row = btn.closest('.player-row');
+  if (!row) return;
+  const id = row.dataset.id;
+  const action = btn.dataset.action;
+  if (action === 'view') openDetail(id);
+  else if (action === 'edit') startEdit(id);
+  else if (action === 'delete') confirmDelete(id);
+}
+
+/* ---------------------------- export / import ---------------------------- */
+function exportJSON() {
+  const data = JSON.stringify(players, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `fsas_database_${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Database berhasil diexport.', 'success');
+}
+function handleImportFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('invalid');
+      showConfirm(`Import ${data.length} data pemain ke database? Data dengan ID yang sama akan ditimpa.`, () => {
+        const map = {};
+        players.forEach(p => { map[p.id] = p; });
+        data.forEach(p => { if (p && p.id) map[p.id] = p; });
+        players = Object.values(map);
+        savePlayers(players);
+        renderDashboard();
+        showToast('Import berhasil.', 'success');
+      });
+    } catch (err) {
+      showToast('File JSON tidak valid.', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+function onImportChange(e) {
+  const file = e.target.files[0];
+  if (file) handleImportFile(file);
+  e.target.value = '';
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function exportPlayerCardPNG(player) {
+  const canvas = $('hiddenExportCanvas');
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+
+  const grad = ctx.createLinearGradient(0, 0, w, h);
+  grad.addColorStop(0, '#1e2c5c'); grad.addColorStop(.55, '#0b1226'); grad.addColorStop(1, '#05070f');
+  ctx.fillStyle = grad; roundRect(ctx, 0, 0, w, h, 28); ctx.fill();
+  ctx.strokeStyle = 'rgba(212,175,55,.5)'; ctx.lineWidth = 2; roundRect(ctx, 2, 2, w - 4, h - 4, 26); ctx.stroke();
+
+  const tier = getTier(player.scores.ovr);
+  ctx.fillStyle = tier.hex;
+  ctx.font = '700 64px Rajdhani, sans-serif';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.fillText(String(player.scores.ovr), 40, 96);
+  ctx.font = '600 15px Rajdhani, sans-serif';
+  ctx.fillText(tier.name.toUpperCase(), 40, 120);
+
+  ctx.fillStyle = '#f5f7fb';
+  ctx.font = '700 32px Rajdhani, sans-serif';
+  ctx.fillText(player.name, 40, 164);
+  ctx.fillStyle = '#8c93b5';
+  ctx.font = '400 15px Inter, sans-serif';
+  ctx.fillText(`${player.age} Tahun  \u2022  ${formatDate(player.date)}`, 40, 188);
+
+  const radarCanvas = document.createElement('canvas');
+  radarCanvas.width = 300; radarCanvas.height = 300;
+  drawRadarChart(radarCanvas, player.scores);
+  ctx.drawImage(radarCanvas, w - 340, 40, 300, 300);
+
+  const keys = CONFIG.categoryOrder;
+  const colWidth = (w - 80) / 3;
+  keys.forEach((k, i) => {
+    const col = i % 3, row = Math.floor(i / 3);
+    const x = 40 + col * colWidth, y = 360 + row * 55;
+    ctx.fillStyle = STAT_COLORS[k];
+    ctx.font = '700 18px Rajdhani, sans-serif';
+    ctx.fillText(CONFIG.categories[k].label, x, y);
+    ctx.fillStyle = '#f5f7fb';
+    ctx.font = '700 26px Rajdhani, sans-serif';
+    ctx.fillText(String(player.scores[k]), x, y + 26);
+  });
+
+  ctx.fillStyle = 'rgba(245,247,251,.35)';
+  ctx.font = '500 12px Inter, sans-serif';
+  ctx.fillText('Eterna Acardia \u2014 Football Skill Assessment System', 40, h - 20);
+
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${player.name.replace(/\s+/g, '_')}_PlayerCard.png`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('Player card berhasil diexport.', 'success');
+  });
+}
+
+/* ---------------------------- ripple micro-interaction ---------------------------- */
+function wireRipple() {
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const span = document.createElement('span');
+    span.className = 'ripple';
+    const size = Math.max(rect.width, rect.height);
+    span.style.width = span.style.height = size + 'px';
+    span.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    span.style.top = (e.clientY - rect.top - size / 2) + 'px';
+    btn.appendChild(span);
+    setTimeout(() => span.remove(), 650);
+  });
+}
+
+/* ---------------------------- init ---------------------------- */
+function init() {
+  document.querySelectorAll('[data-back]').forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.back)));
+  wireRipple();
+
+  $('btnNewMeasurement').addEventListener('click', onNewMeasurement);
+  $('btnStartAssessment').addEventListener('click', onStartAssessment);
+  $('categoryGrid').addEventListener('input', onCategoryInput);
+  $('categoryGrid').addEventListener('click', onCategoryGridClick);
+  $('btnCalculate').addEventListener('click', onCalculate);
+  $('btnSave').addEventListener('click', onSave);
+  $('playerListContainer').addEventListener('click', onPlayerListClick);
+  $('searchInput').addEventListener('input', renderPlayerList);
+  $('sortSelect').addEventListener('change', renderPlayerList);
+
+  $('btnDetailEdit').addEventListener('click', () => { if (currentDetailId) startEdit(currentDetailId); });
+  $('btnDetailDelete').addEventListener('click', () => { if (currentDetailId) confirmDelete(currentDetailId); });
+  $('btnDetailExport').addEventListener('click', () => {
+    const player = players.find(p => p.id === currentDetailId);
+    if (player) exportPlayerCardPNG(player);
+  });
+
+  $('btnExportJson').addEventListener('click', exportJSON);
+  $('importJsonInput').addEventListener('change', onImportChange);
+
+  $('btnGuide').addEventListener('click', () => { renderGuidePage(); showView('view-guide'); });
+  $('btnPrintGuide').addEventListener('click', () => window.print());
+  $('infoModalCloseBtn').addEventListener('click', closeInfoModal);
+  $('infoModal').addEventListener('click', (e) => { if (e.target.id === 'infoModal') closeInfoModal(); });
+
+  renderDashboard();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+
+</script>
+</body>
+</html>
